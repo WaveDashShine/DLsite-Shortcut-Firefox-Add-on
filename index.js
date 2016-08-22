@@ -85,30 +85,10 @@ function openDLsite(text){
   var matchArray = text.toString().match(regex);
   console.log("matched regex is: " + matchArray);
   if(matchArray) {
-    tabs.open(dlsite+matchArray);
+    console.log("length of Array is: " + matchArray.length);
+    for (var i = 0; i < matchArray.length; i++) {
+      console.log("Number " + i + " in the array is: " + matchArray[i]);
+      tabs.open(dlsite+matchArray[i]);
+    }
   }
 }
-
-// TODO: make it so that DLsite opens when you double click instead of select
-/*
-selection.on('select',function(){
-	if(selection.text){
-		var selectedString = selection.text.toString();
-		console.log("selected string is \"" + selectedString + "\"");
-		var matchArray = selectedString.match(regex);
-		console.log(matchArray);
-
-		// WARNING THIS CODE DOESN'T WORK AS INTENDED
-		if (Array.isArray(matchArray)) {
-			if (!selection.isContiguous) {
-				for (var i = 0; i < matchArray.length; i++){
-					openDLsite(matchArray[i]);
-				}
-			} else {
-				var first = matchArray.shift();
-				openDLsite(first);
-			}
-		}
-	}
-});
-*/
