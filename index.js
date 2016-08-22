@@ -59,7 +59,7 @@ function isProductCode(data){
 // TODO: make the icons
 var button = buttons.ActionButton({
   id: "dlsite-link",
-  label: "Jump between JP and ENG",
+  label: "DLsite JP <-> ENG",
   icon: {
     "16": "./icon-16.png",
     "32": "./icon-32.png",
