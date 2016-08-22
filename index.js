@@ -31,7 +31,7 @@ console.log("index.js is running...");
 // dlMenu.parentMenu.items[0].destroy(); if you need to destroy the cm.Item
 var dlMenu = cm.Item({
   label: "Open in DLsite",
-  image: self.data.url("./icon-16.png"),
+  image: self.data.url("./DL-16.png"),
   contentScript: 'self.on("click", function () {' +
                  '  var text = window.getSelection().toString();' +
                  '  self.postMessage(text);' +
@@ -61,9 +61,9 @@ var button = buttons.ActionButton({
   id: "dlsite-link",
   label: "DLsite JP <-> ENG",
   icon: {
-    "16": "./icon-16.png",
-    "32": "./icon-32.png",
-    "64": "./icon-64.png"
+    "16": "./DL-16.png",
+    "32": "./DL-32.png",
+    "64": "./DL-64.png"
   },
   onClick: languageToggle
 });
