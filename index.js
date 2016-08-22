@@ -18,6 +18,7 @@ var selection = require("sdk/selection");
 var buttons = require('sdk/ui/button/action');
 var tabs = require("sdk/tabs");
 var cm = require("sdk/context-menu");
+//var clipboard = require("sdk/clipboard");
 
 // regex for the product codes in DLsite
 var regex = /R(J|E)\d{6}/g;
@@ -30,16 +31,30 @@ console.log("index.js is running...");
 // dlMenu.parentMenu.items[0].destroy(); if you need to destroy the cm.Item
 var dlMenu = cm.Item({
   label: "Open in DLsite",
-  context: cm.SelectionContext(),
+  image: self.data.url("./icon-16.png"),
   contentScript: 'self.on("click", function () {' +
                  '  var text = window.getSelection().toString();' +
                  '  self.postMessage(text);' +
                  '});',
   onMessage: function (selectionText) {
-    console.log(selectionText);
+    console.log("Selected text is: " + selectionText);
     openDLsite(selectionText);
-  }
+  },
+  context: [cm.PredicateContext(isProductCode), cm.SelectionContext()]
 });
+
+/*** predicate function for context menu
+1) Returns TRUE if selected text matches dlsite product code
+***/
+function isProductCode(data){
+  if (data.selectionText === null) {
+    return false;
+  }
+  var match = data.selectionText.match(regex);
+  if (match) {
+    return true;
+  }
+}
 
 // TODO: make the icons
 var button = buttons.ActionButton({
@@ -62,10 +77,12 @@ function languageToggle(state) {
   var eng = "/product_id/RE";
   var active = tabs.activeTab.url;
 
+  // move this function somewhere else...
   if (!active.includes("dlsite.com")){
   	tabs.open("http://www.dlsite.com/");
   }
 
+  //TODO: can language toggle predict the next page?
   if (active.includes("dlsite.com")){
   	if (active.includes(jp)){
   		tabs.activeTab.url = active.replace(jp,eng);
