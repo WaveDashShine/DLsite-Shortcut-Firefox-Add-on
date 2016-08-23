@@ -29,12 +29,15 @@ TEST SOME CODES HERE:
 
 Hatoful Boyfriend -Hatoful complete edition-  
 - pigeon dating simulator?  
-[ENGLISH]  RE091090  
-[JAPANESE] RJ091090
+[English]  RE091090  
+[Japanese] RJ091090  
+[Case Insensitive] re091090  
+[Case Insensitive] rj091090  
 
 PacoProject  
 - strange alpacas  
-[Group Code] RG15719
+[Group Code]        RG15719  
+[Case Insensitive]  rg15719  
 
 *************************************************************
 
