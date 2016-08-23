@@ -1,18 +1,27 @@
 #DLsite Shortcut
-Double click product code to reach DLsite product page
+
+Select any number of DLsite product codes, and open them to DLsite with the context menu.
+
+Language toggle available on DLsite with either the button or Context Menu.
+
+Switch from the Japanese version to the English version of the site, provided that a mirror exists, and vice versa.
 
 /*************************************************************
-DLsite function
-to change the name and desc, refer to the package.json file
 
-TODO: update so it works for more than just the basic RJ produce codes (ie such that it includes BJ and VJ product codes as well)
-- also the group/circle codes as well
+TODO: currently does not open group codes
 
-TODO: add images to button & context menu
+KNOWN ISSUES: does not language toggle group profiles if the names are different
+
 *************************************************************/
 
+HOW TO INSTALL:
+download the .xpi file, and open it with firefox
+
+Developer tools: 
+https://developer.mozilla.org/en-US/Add-ons
+
 >jpm run
-test run the app in boxed version of firefox
+test run the app in test version of firefox
 
 >jpm xpi 
 creates xpi file that you can install in firefox

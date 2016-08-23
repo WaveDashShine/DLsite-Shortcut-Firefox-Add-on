@@ -2,7 +2,7 @@
   "title": "DLsite Shortcut",
   "name": "dlsite",
   "version": "0.0.1",
-  "description": "Select and Open DLsite product codes. Currently only compatible with RJ and RE codes.",
+  "description": "Select and Open DLsite product codes. Currently only compatible with RJ and RE codes. Language toggle from Japanese to English DLsite available from button or context menu.",
   "main": "index.js",
   "author": "WaveDashShine",
   "engines": {

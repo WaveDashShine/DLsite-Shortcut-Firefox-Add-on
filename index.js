@@ -22,7 +22,9 @@ var tabs = require("sdk/tabs");
 var cm = require("sdk/context-menu");
 
 // regex for the product codes in DLsite
-var regex = /R(J|E)\d{6}/g;
+// TODO: implement regex for group codes in DLsite
+var regex = /(R|V|B)(J|E)\d{6}/g;
+var regexGroup = /(R|V|B)(J|E|G)\d{6}/g;
 // TODO: implement default DLsite in options
 var dlsite = "http://www.dlsite.com/home/work/=/product_id/";
 
@@ -126,6 +128,9 @@ function languageToggle() {
   // case 3:
   var ecchi = "/ecchi-eng";
   var maniax = "/maniax";
+  // case 4:
+  var gayEng = "/gay-eng";
+  var gay = "/gay";
 
   var active = tabs.activeTab.url;
 
@@ -143,7 +148,11 @@ function languageToggle() {
       tabs.activeTab.url = active.replace(ecchi,maniax);
     } else if (active.includes(maniax)){
       tabs.activeTab.url = active.replace(maniax,ecchi);
-    }
+    } else if (active.includes(gayEng)){
+      tabs.activeTab.url = active.replace(gayEng,gay);
+    } else if (active.includes(gay)){
+      tabs.activeTab.url = active.replace(gay,gayEng);
+    } 
 
   }
 }
