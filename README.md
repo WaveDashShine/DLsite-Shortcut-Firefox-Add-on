@@ -6,6 +6,8 @@ Language toggle available on DLsite with either the button or context menu (righ
 Switch from the Japanese version to the English version of the site, provided that a mirror exists, and vice versa.
 
 Group codes default to the Japanese maniax website.
+
+Click the button to open the DLsite homepage if you're not on DLsite already.
 *************************************************************
 
 HOW TO INSTALL:  
