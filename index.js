@@ -23,8 +23,8 @@ var cm = require("sdk/context-menu");
 
 // regex for the product codes in DLsite
 // TODO: implement regex for group codes in DLsite
-var regex = /(R|V|B)(J|E)\d{6}/g;
-var regexGroup = /(R|V|B)(G)\d{5}/g;
+var regex = /(R|V|B)(J|E)\d{6}/gi;
+var regexGroup = /(R|V|B)(G)\d{5}/gi;
 // TODO: implement default DLsite in options
 var dlsite = "http://www.dlsite.com/home/work/=/product_id/";
 var dlsiteGroup = "http://www.dlsite.com/maniax/circle/profile/=/maker_id/";
@@ -163,6 +163,24 @@ function languageToggle() {
   }
 }
 
+/*** HELPER for opening DLsite 
+1) opens sanitized text DLsite
+2) depending on product code or group code
+***/
+function openDLsiteHelper(array){
+
+  if(array){
+    for (var i = 0; i < array.length; i++) {
+      if(array[i].includes("G")||array[i].includes("g")){
+        tabs.open(dlsiteGroup+array[i].toUpperCase());
+      } else {
+        tabs.open(dlsite+array[i].toUpperCase());
+      }
+    }
+  }
+
+}
+
 /*** SEARCH SELECTION FOR DLSITE PRODUCT CODE AND OPENS CORRESPONDING PAGE
 TODO: refactor code to separate functions
 1) opens sanitized text DLsite
@@ -172,18 +190,7 @@ function openDLsite(text){
   //console.log("text is: " + text);
   var matchArray = text.toString().match(regex);
   var matchArrayGroup = text.toString().match(regexGroup);
-  //console.log("matched regex is: " + matchArray);
-  if(matchArray) {
-    //console.log("length of Array is: " + matchArray.length);
-    for (var i = 0; i < matchArray.length; i++) {
-      //console.log("Number " + i + " in the array is: " + matchArray[i]);
-        tabs.open(dlsite+matchArray[i]);
-    }
-  }
-
-  if(matchArrayGroup){
-    for (var i = 0; i < matchArrayGroup.length; i++) {
-      tabs.open(dlsiteGroup+matchArrayGroup[i]);
-    }
-  }
+  
+  openDLsiteHelper(matchArray);
+  openDLsiteHelper(matchArrayGroup);
 }
