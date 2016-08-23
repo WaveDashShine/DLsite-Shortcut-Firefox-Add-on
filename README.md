@@ -1,14 +1,14 @@
 #DLsite Shortcut
 
-Select any number of DLsite product codes, and open them to DLsite with the context menu.
+Select any number of DLsite product codes, and open them to DLsite with the context menu (right click).
 
-Language toggle available on DLsite with either the button or Context Menu.
+Language toggle available on DLsite with either the button or context menu (right click).
 Switch from the Japanese version to the English version of the site, provided that a mirror exists, and vice versa.
 
-Group codes default to the Japanese website.
+Group codes default to the Japanese maniax website.
 *************************************************************
 
-HOW TO INSTALL:
+HOW TO INSTALL:  
 1) download *signed* .xpi file  
 2) open or drag into firefox
 
