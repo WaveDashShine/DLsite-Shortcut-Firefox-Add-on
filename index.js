@@ -24,9 +24,10 @@ var cm = require("sdk/context-menu");
 // regex for the product codes in DLsite
 // TODO: implement regex for group codes in DLsite
 var regex = /(R|V|B)(J|E)\d{6}/g;
-var regexGroup = /(R|V|B)(J|E|G)\d{6}/g;
+var regexGroup = /(R|V|B)(G)\d{5}/g;
 // TODO: implement default DLsite in options
 var dlsite = "http://www.dlsite.com/home/work/=/product_id/";
+var dlsiteGroup = "http://www.dlsite.com/maniax/circle/profile/=/maker_id/";
 
 // console logs for superficially checking that index.js is running
 //console.log("index.js is running...");
@@ -75,7 +76,8 @@ function isProductCode(data){
     return false;
   }
   var match = data.selectionText.match(regex);
-  if (match) {
+  var matchGroup = data.selectionText.match(regexGroup);
+  if (match||matchGroup) {
     return true;
   }
 }
@@ -165,12 +167,19 @@ TODO: refactor code to separate functions
 function openDLsite(text){
   //console.log("text is: " + text);
   var matchArray = text.toString().match(regex);
+  var matchArrayGroup = text.toString().match(regexGroup);
   //console.log("matched regex is: " + matchArray);
   if(matchArray) {
     //console.log("length of Array is: " + matchArray.length);
     for (var i = 0; i < matchArray.length; i++) {
       //console.log("Number " + i + " in the array is: " + matchArray[i]);
-      tabs.open(dlsite+matchArray[i]);
+        tabs.open(dlsite+matchArray[i]);
+    }
+  }
+
+  if(matchArrayGroup){
+    for (var i = 0; i < matchArrayGroup.length; i++) {
+      tabs.open(dlsiteGroup+matchArrayGroup[i]);
     }
   }
 }
