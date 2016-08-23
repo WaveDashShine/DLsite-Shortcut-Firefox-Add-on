@@ -53,8 +53,8 @@ var dlMenu = cm.Item({
 *) currently only compatible with RE and RJ codes
 ***/
 
-/*** predicate function for context menu
-1) Returns TRUE if selected text matches dlsite product code
+/*** PREDICATE FUNCTION FOR CONTEXT MENU
+1) Returns TRUE if selected text contains dlsite product code
 ***/
 function isProductCode(data){
   if (data.selectionText === null) {
@@ -66,7 +66,8 @@ function isProductCode(data){
   }
 }
 
-// TODO: make the icons
+/*** DLSITE BUTTON 
+***/
 var button = buttons.ActionButton({
   id: "dlsite-link",
   label: "DLsite JP <-> ENG",
@@ -78,16 +79,16 @@ var button = buttons.ActionButton({
   onClick: languageToggle
 });
 
-/*** BUTTON FUNCTION
+/*** BUTTON FUNCTION LANGUAGE TOGGLE and OPEN DLsite
 1) loads DLsite.com in new tab if active tab does not have DLsite open
 2) if product code is detected in URL, toggles the region language
+*) TODO: refactor and separate functions
 ***/
-function languageToggle(state) {
+function languageToggle() {
   var jp = "/product_id/RJ";
   var eng = "/product_id/RE";
   var active = tabs.activeTab.url;
 
-  // move this function somewhere else...
   if (!active.includes("dlsite.com")){
   	tabs.open("http://www.dlsite.com/");
   }
@@ -102,7 +103,7 @@ function languageToggle(state) {
   }
 }
 
-/***
+/*** SEARCH SELECTION FOR DLSITE PRODUCT CODE AND OPENS CORRESPONDING PAGE
 TODO: refactor code to separate functions
 1) opens sanitized text DLsite
 *) match() returns an array object if match is found, null otherwise
