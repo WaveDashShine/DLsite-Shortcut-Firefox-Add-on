@@ -13,8 +13,8 @@ KNOWN ISSUES: group codes occasionally do not open or toggle language correctly
 TODOs: in comments in index.js
 *************************************************************
 
-HOW TO INSTALL:
-download the .xpi file, and open it with Firefox
+Developer tools: 
+https://developer.mozilla.org/en-US/Add-ons
 
 *************************************************************
 
@@ -35,11 +35,4 @@ PacoProject
 [Group Code] RG15719
 
 *************************************************************
-Developer tools: 
-https://developer.mozilla.org/en-US/Add-ons
 
->1) jpm run
-test run the app in test version of Firefox
-
->2) jpm xpi 
-creates xpi file that you can install in Firefox
