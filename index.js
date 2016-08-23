@@ -133,6 +133,8 @@ function languageToggle() {
   // case 4:
   var gayEng = "/gay-eng";
   var gay = "/gay";
+  // case 5: converts to eng
+  var girls = "/girls";
 
   var active = tabs.activeTab.url;
 
@@ -154,6 +156,8 @@ function languageToggle() {
       tabs.activeTab.url = active.replace(gayEng,gay);
     } else if (active.includes(gay)){
       tabs.activeTab.url = active.replace(gay,gayEng);
+    } else if (active.includes(girls)){
+      tabs.activeTab.url = active.replace(girls,eng);
     } 
 
   }
