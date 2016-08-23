@@ -1,5 +1,6 @@
 var self = require("sdk/self");
 
+/***
 // a dummy function, to show how tests work.
 // to see how to test this function, look at test/test-index.js
 function dummy(text, callback) {
@@ -7,10 +8,11 @@ function dummy(text, callback) {
 }
 
 exports.dummy = dummy;
+***/
 
 /*** 
 WARNING:
-sdk self is initialized in the dummy code
+sdk self is initialized above the dummy code
 add it back when the app breaks when the dummy is removed
 ***/
 
@@ -18,7 +20,6 @@ var selection = require("sdk/selection");
 var buttons = require('sdk/ui/button/action');
 var tabs = require("sdk/tabs");
 var cm = require("sdk/context-menu");
-//var clipboard = require("sdk/clipboard");
 
 // regex for the product codes in DLsite
 var regex = /R(J|E)\d{6}/g;
@@ -26,8 +27,12 @@ var regex = /R(J|E)\d{6}/g;
 var dlsite = "http://www.dlsite.com/home/work/=/product_id/";
 
 // console logs for superficially checking that index.js is running
-console.log("index.js is running...");
+//console.log("index.js is running...");
 
+/*** CONTEXT MENU OPEN IN DLSITE
+1) context menu item to open product codes in DLsite
+*) currently only compatible with RE and RJ codes
+***/
 // dlMenu.parentMenu.items[0].destroy(); if you need to destroy the cm.Item
 var dlMenu = cm.Item({
   label: "Open in DLsite",
@@ -37,11 +42,16 @@ var dlMenu = cm.Item({
                  '  self.postMessage(text);' +
                  '});',
   onMessage: function (selectionText) {
-    console.log("Selected text is: " + selectionText);
+    //console.log("Selected text is: " + selectionText);
     openDLsite(selectionText);
   },
   context: [cm.PredicateContext(isProductCode), cm.SelectionContext()]
 });
+
+/*** CONTEXT MENU LANGUAGE TOGGLE
+1) context menu item to toggle between ENG and JP
+*) currently only compatible with RE and RJ codes
+***/
 
 /*** predicate function for context menu
 1) Returns TRUE if selected text matches dlsite product code
@@ -98,13 +108,13 @@ TODO: refactor code to separate functions
 *) match() returns an array object if match is found, null otherwise
 ***/
 function openDLsite(text){
-  console.log("text is: " + text);
+  //console.log("text is: " + text);
   var matchArray = text.toString().match(regex);
-  console.log("matched regex is: " + matchArray);
+  //console.log("matched regex is: " + matchArray);
   if(matchArray) {
-    console.log("length of Array is: " + matchArray.length);
+    //console.log("length of Array is: " + matchArray.length);
     for (var i = 0; i < matchArray.length; i++) {
-      console.log("Number " + i + " in the array is: " + matchArray[i]);
+      //console.log("Number " + i + " in the array is: " + matchArray[i]);
       tabs.open(dlsite+matchArray[i]);
     }
   }

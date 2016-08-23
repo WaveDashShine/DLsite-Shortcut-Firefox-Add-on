@@ -2,9 +2,9 @@
   "title": "DLsite Shortcut",
   "name": "dlsite",
   "version": "0.0.1",
-  "description": "Double click product code to reach DLsite product page",
+  "description": "Select and Open DLsite product codes. Currently only compatible with RJ and RE codes.",
   "main": "index.js",
-  "author": "Erik Cui",
+  "author": "WaveDashShine",
   "engines": {
     "firefox": ">=38.0a1",
     "fennec": ">=38.0a1"
