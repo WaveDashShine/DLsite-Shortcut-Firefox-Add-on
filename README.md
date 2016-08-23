@@ -6,6 +6,11 @@ Language toggle available on DLsite with either the button or Context Menu.
 Switch from the Japanese version to the English version of the site, provided that a mirror exists, and vice versa.
 
 Group codes default to the Japanese website.
+*************************************************************
+
+HOW TO INSTALL:
+1) download *signed* .xpi file  
+2) open or drag into firefox
 
 *************************************************************
 KNOWN ISSUES: group codes occasionally do not open or toggle language correctly
@@ -20,18 +25,13 @@ https://developer.mozilla.org/en-US/Add-ons
 
 TEST SOME CODES HERE:
 
-Hatoful Boyfriend -Hatoful complete edition-
-
-- pigeon dating simulator?
-
-[ENGLISH]  RE091090 
-
+Hatoful Boyfriend -Hatoful complete edition-  
+- pigeon dating simulator?  
+[ENGLISH]  RE091090  
 [JAPANESE] RJ091090
 
-PacoProject
-- strange alpacas
-
-
+PacoProject  
+- strange alpacas  
 [Group Code] RG15719
 
 *************************************************************
