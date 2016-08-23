@@ -9,6 +9,7 @@ Group codes default to the Japanese website.
 
 *************************************************************
 KNOWN ISSUES: group codes occasionally do not open or toggle language correctly
+
 TODOs: in comments in index.js
 *************************************************************
 
@@ -20,12 +21,17 @@ download the .xpi file, and open it with Firefox
 TEST SOME CODES HERE:
 
 Hatoful Boyfriend -Hatoful complete edition-
+
 - pigeon dating simulator?
+
 [ENGLISH]  RE091090 
+
 [JAPANESE] RJ091090
 
 PacoProject
 - strange alpacas
+
+
 [Group Code] RG15719
 
 *************************************************************
