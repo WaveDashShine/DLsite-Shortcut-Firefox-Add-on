@@ -52,6 +52,18 @@ var dlMenu = cm.Item({
 1) context menu item to toggle between ENG and JP
 *) currently only compatible with RE and RJ codes
 ***/
+var langMenu = cm.Item({
+  label: "Toggle language",
+  image: self.data.url("./DL-16.png"),
+  contentScript: 'self.on("click", function () {' +
+                 '  self.postMessage();' +
+                 '});',
+  onMessage: function () {
+    //console.log("Selected text is: " + selectionText);
+    languageToggle();
+  },
+  context: cm.URLContext("*.dlsite.com")
+});
 
 /*** PREDICATE FUNCTION FOR CONTEXT MENU
 1) Returns TRUE if selected text contains dlsite product code
@@ -76,30 +88,63 @@ var button = buttons.ActionButton({
     "32": "./DL-32.png",
     "64": "./DL-64.png"
   },
-  onClick: languageToggle
+  onClick: function(state){
+    openHome();
+    languageToggle();
+  }
 });
+
+/*** OPEN DLSITE HOMEPAGE
+1) opens the DLsite homepage if not already on the site
+***/
+function openHome() {
+  var active = tabs.activeTab.url;
+
+  if (!active.includes("dlsite.com")){
+    tabs.open("http://www.dlsite.com/");
+  }
+}
 
 /*** BUTTON FUNCTION LANGUAGE TOGGLE and OPEN DLsite
 1) loads DLsite.com in new tab if active tab does not have DLsite open
 2) if product code is detected in URL, toggles the region language
+
+RE    : RJ
+eng   : home
+ecchi-eng : maniax
+
 *) TODO: refactor and separate functions
 ***/
 function languageToggle() {
-  var jp = "/product_id/RJ";
-  var eng = "/product_id/RE";
+  // variables for the product codes and various language conversion
+  // case 1:
+  var rj = "/product_id/RJ";
+  var re = "/product_id/RE";
+  // case 2:
+  var eng = "/eng";
+  var home = "/home";
+  // case 3:
+  var ecchi = "/ecchi-eng";
+  var maniax = "/maniax";
+
   var active = tabs.activeTab.url;
 
-  if (!active.includes("dlsite.com")){
-  	tabs.open("http://www.dlsite.com/");
-  }
-
-  //TODO: can language toggle predict the next page?
   if (active.includes("dlsite.com")){
-  	if (active.includes(jp)){
-  		tabs.activeTab.url = active.replace(jp,eng);
+
+  	if (active.includes(rj)){
+  		tabs.activeTab.url = active.replace(rj,re);
+  	} else if (active.includes(re)){
+  		tabs.activeTab.url = active.replace(re,rj); 
   	} else if (active.includes(eng)){
-  		tabs.activeTab.url = active.replace(eng,jp); 
-  	}
+      tabs.activeTab.url = active.replace(eng,home);
+    } else if (active.includes(home)){
+      tabs.activeTab.url = active.replace(home,eng);
+    } else if (active.includes(ecchi)){
+      tabs.activeTab.url = active.replace(ecchi,maniax);
+    } else if (active.includes(maniax)){
+      tabs.activeTab.url = active.replace(maniax,ecchi);
+    }
+
   }
 }
 
