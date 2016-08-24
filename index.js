@@ -83,10 +83,12 @@ function isProductCode(data){
 }
 
 /*** DLSITE BUTTON 
+1) can open the DLsite homepage
+2) can toggle DLsite language
 ***/
 var button = buttons.ActionButton({
   id: "dlsite-link",
-  label: "DLsite JP <-> ENG",
+  label: "DLsite Shortcut",
   icon: {
     "16": "./DL-16.png",
     "32": "./DL-32.png",
