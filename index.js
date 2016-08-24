@@ -22,10 +22,10 @@ var tabs = require("sdk/tabs");
 var cm = require("sdk/context-menu");
 
 // regex for the product codes in DLsite
-// TODO: implement regex for group codes in DLsite
+
 var regex = /(R|V|B)(J|E)\d{6}/gi;
 var regexGroup = /(R|V|B)(G)\d{5}/gi;
-// TODO: implement default DLsite in options
+
 var dlsite = "http://www.dlsite.com/home/work/=/product_id/";
 var dlsiteGroup = "http://www.dlsite.com/maniax/circle/profile/=/maker_id/";
 
@@ -119,7 +119,6 @@ RE    : RJ
 eng   : home
 ecchi-eng : maniax
 
-*) TODO: refactor and separate functions
 ***/
 function languageToggle() {
   // variables for the product codes and various language conversion
@@ -184,7 +183,6 @@ function openDLsiteHelper(array){
 }
 
 /*** SEARCH SELECTION FOR DLSITE PRODUCT CODE AND OPENS CORRESPONDING PAGE
-TODO: refactor code to separate functions
 1) opens sanitized text DLsite
 *) match() returns an array object if match is found, null otherwise
 ***/

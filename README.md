@@ -15,9 +15,7 @@ HOW TO INSTALL:
 2) open or drag into firefox
 
 *************************************************************
-KNOWN ISSUES: group codes occasionally do not open or toggle language correctly
-
-TODOs: in comments in index.js
+KNOWN ISSUES: group codes occasionally do not open or toggle language correctly.
 *************************************************************
 
 Developer tools: 
