@@ -7,3 +7,5 @@
 
 # Extra Resources in the jpmignore folder
 /jpmignore/
+/test/
+/.git/
