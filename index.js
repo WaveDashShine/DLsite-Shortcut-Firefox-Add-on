@@ -1,16 +1,5 @@
 var self = require("sdk/self");
 
-/***
-// a dummy function, to show how tests work.
-// to see how to test this function, look at test/test-index.js
-// refer back to MDN SDK for dummy code if tests are needed
-/*** 
-
-WARNING:
-sdk self is initialized above the dummy code
-add it back when the app breaks when the dummy is removed
-***/
-
 var selection = require("sdk/selection");
 var buttons = require('sdk/ui/button/action');
 var tabs = require("sdk/tabs");
