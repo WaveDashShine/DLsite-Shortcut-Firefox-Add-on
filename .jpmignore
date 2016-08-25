@@ -4,3 +4,6 @@
 # Ignore any zip or xpi files
 *.zip
 *.xpi
+
+# Extra Resources in the jpmignore folder
+/jpmignore/
