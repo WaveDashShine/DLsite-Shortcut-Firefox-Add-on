@@ -12,8 +12,7 @@ Click the button to open the DLsite homepage if you're not on DLsite already.
 *************************************************************
 
 HOW TO INSTALL:  
-1) download *signed* .xpi file  
-2) open or drag into firefox
+https://addons.mozilla.org/en-US/firefox/addon/dlsite-shortcut/
 
 *************************************************************
 KNOWN ISSUES: group codes occasionally do not open or toggle language correctly.
