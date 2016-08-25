@@ -3,14 +3,9 @@ var self = require("sdk/self");
 /***
 // a dummy function, to show how tests work.
 // to see how to test this function, look at test/test-index.js
-function dummy(text, callback) {
-  callback(text);
-}
-
-exports.dummy = dummy;
-***/
-
+// refer back to MDN SDK for dummy code if tests are needed
 /*** 
+
 WARNING:
 sdk self is initialized above the dummy code
 add it back when the app breaks when the dummy is removed
@@ -29,9 +24,6 @@ var regexGroup = /(R|V|B)(G)\d{5}/gi;
 var dlsite = "http://www.dlsite.com/home/work/=/product_id/";
 var dlsiteGroup = "http://www.dlsite.com/maniax/circle/profile/=/maker_id/";
 
-// console logs for superficially checking that index.js is running
-//console.log("index.js is running...");
-
 /*** CONTEXT MENU OPEN IN DLSITE
 1) context menu item to open product codes in DLsite
 *) currently only compatible with RE and RJ codes
@@ -45,7 +37,6 @@ var dlMenu = cm.Item({
                  '  self.postMessage(text);' +
                  '});',
   onMessage: function (selectionText) {
-    //console.log("Selected text is: " + selectionText);
     openDLsite(selectionText);
   },
   context: [cm.PredicateContext(isProductCode), cm.SelectionContext()]
@@ -62,7 +53,6 @@ var langMenu = cm.Item({
                  '  self.postMessage();' +
                  '});',
   onMessage: function () {
-    //console.log("Selected text is: " + selectionText);
     languageToggle();
   },
   context: cm.URLContext("*.dlsite.com")
@@ -135,6 +125,7 @@ function languageToggle() {
   var gayEng = "/gay-eng";
   var gay = "/gay";
   // case 5: converts to eng
+  // TODO need to add soft/pro option for groups
   var girls = "/girls";
 
   var active = tabs.activeTab.url;
@@ -187,7 +178,6 @@ function openDLsiteHelper(array){
 *) match() returns an array object if match is found, null otherwise
 ***/
 function openDLsite(text){
-  //console.log("text is: " + text);
   var matchArray = text.toString().match(regex);
   var matchArrayGroup = text.toString().match(regexGroup);
   
