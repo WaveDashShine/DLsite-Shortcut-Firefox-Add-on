@@ -31,11 +31,13 @@ Hatoful Boyfriend -Hatoful complete edition-
 [Japanese] RJ091090  
 [Case Insensitive] re091090  
 [Case Insensitive] rj091090  
+[Number only] 091090  
 
 PacoProject  
 - strange alpacas  
 [Group Code]        RG15719  
-[Case Insensitive]  rg15719  
+[Case Insensitive]  rg15719 
+[Number only]  		15719 
 
 *************************************************************
 
