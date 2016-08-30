@@ -149,11 +149,11 @@ function languageToggle() {
       tabs.activeTab.url = active.replace(gayEng,gay);
     } else if (active.includes(gay)){
       tabs.activeTab.url = active.replace(gay,gayEng);
-    } else if (active.includes(girls)){
-      tabs.activeTab.url = active.replace(girls,gayEng);
     } else if (active.includes(girlsPro)){
       tabs.activeTab.url = active.replace(girlsPro,gayEng);
-    }
+    } else if (active.includes(girls)){
+      tabs.activeTab.url = active.replace(girls,gayEng);
+    } 
 
   }
 }
