@@ -1,21 +1,27 @@
 var self = require("sdk/self");
-
 var selection = require("sdk/selection");
 var buttons = require('sdk/ui/button/action');
 var tabs = require("sdk/tabs");
 var cm = require("sdk/context-menu");
 
-// regex for the product codes in DLsite
+/*** DLsite REGEX, parts separated in order:
+1) product code
+2) product code (number only)
+3) group code
+***/
+var regex = /(R|V|B)(J|E)\d{6}|\d{6}|(R|V|B)(G)\d{5}/gi;
 
-var regex = /(R|V|B)(J|E)\d{6}/gi;
-var regexGroup = /(R|V|B)(G)\d{5}/gi;
-
+/*** DLsite URL structures:
+1) product code
+2) product code (number only)
+3) group code
+***/
 var dlsite = "http://www.dlsite.com/home/work/=/product_id/";
+var dlsiteNum = "http://www.dlsite.com/home/work/=/product_id/RJ";
 var dlsiteGroup = "http://www.dlsite.com/maniax/circle/profile/=/maker_id/";
 
 /*** CONTEXT MENU OPEN IN DLSITE
 1) context menu item to open product codes in DLsite
-*) currently only compatible with RE and RJ codes
 ***/
 // dlMenu.parentMenu.items[0].destroy(); if you need to destroy the cm.Item
 var dlMenu = cm.Item({
@@ -55,8 +61,7 @@ function isProductCode(data){
     return false;
   }
   var match = data.selectionText.match(regex);
-  var matchGroup = data.selectionText.match(regexGroup);
-  if (match||matchGroup) {
+  if (match) {
     return true;
   }
 }
@@ -93,11 +98,7 @@ function openHome() {
 /*** BUTTON FUNCTION LANGUAGE TOGGLE and OPEN DLsite
 1) loads DLsite.com in new tab if active tab does not have DLsite open
 2) if product code is detected in URL, toggles the region language
-
-RE    : RJ
-eng   : home
-ecchi-eng : maniax
-
+*) replace(): replaces only the first match in the string
 ***/
 function languageToggle() {
   // variables for the product codes and various language conversion
@@ -107,15 +108,18 @@ function languageToggle() {
   // case 2:
   var eng = "/eng";
   var home = "/home";
+  var comic = "/comic";
+  var soft = "/soft";
   // case 3:
   var ecchi = "/ecchi-eng";
   var maniax = "/maniax";
+  var books = "/books";
+  var pro = "/pro";
   // case 4:
   var gayEng = "/gay-eng";
   var gay = "/gay";
-  // case 5: converts to eng
-  // TODO need to add soft/pro option for groups
   var girls = "/girls";
+  var girlsPro = "/girls-pro";
 
   var active = tabs.activeTab.url;
 
@@ -137,16 +141,22 @@ function languageToggle() {
       tabs.activeTab.url = active.replace(gayEng,gay);
     } else if (active.includes(gay)){
       tabs.activeTab.url = active.replace(gay,gayEng);
-    } else if (active.includes(girls)){
-      tabs.activeTab.url = active.replace(girls,eng);
     } 
 
   }
 }
 
+/*** NUMBER CHECKER
+1) returns true if variable is a number
+***/
+function isNumber(n){
+  return !isNaN(n);
+}
+
 /*** HELPER for opening DLsite 
 1) opens sanitized text DLsite
 2) depending on product code or group code
+3) if product code is number only, default to RJ
 ***/
 function openDLsiteHelper(array){
 
@@ -154,6 +164,8 @@ function openDLsiteHelper(array){
     for (var i = 0; i < array.length; i++) {
       if(array[i].includes("G")||array[i].includes("g")){
         tabs.open(dlsiteGroup+array[i].toUpperCase());
+      } else if(isNumber(array[i])) {
+        tabs.open(dlsiteNum+array[i]);
       } else {
         tabs.open(dlsite+array[i].toUpperCase());
       }
@@ -162,14 +174,12 @@ function openDLsiteHelper(array){
 
 }
 
-/*** SEARCH SELECTION FOR DLSITE PRODUCT CODE AND OPENS CORRESPONDING PAGE
-1) opens sanitized text DLsite
+/*** OPEN DLsite
+1) opens sanitized product or group code in DLsite
+2) if DLsite code is number only, default RJ page
 *) match() returns an array object if match is found, null otherwise
 ***/
 function openDLsite(text){
   var matchArray = text.toString().match(regex);
-  var matchArrayGroup = text.toString().match(regexGroup);
-  
   openDLsiteHelper(matchArray);
-  openDLsiteHelper(matchArrayGroup);
 }

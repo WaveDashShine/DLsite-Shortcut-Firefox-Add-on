@@ -6,7 +6,9 @@ Select any number of DLsite product codes, and open them to DLsite with the cont
 Language toggle available on DLsite with either the button or context menu (right click).
 Switch from the Japanese version to the English version of the site, provided that a mirror exists, and vice versa.
 
-Group codes default to the Japanese maniax website.
+Group codes default to the Japanese maniax website.  
+
+Number only codes default to RJ codes
 
 Click the button to open the DLsite homepage if you're not on DLsite already.
 *************************************************************
@@ -14,8 +16,6 @@ Click the button to open the DLsite homepage if you're not on DLsite already.
 HOW TO INSTALL:  
 https://addons.mozilla.org/en-US/firefox/addon/dlsite-shortcut/
 
-*************************************************************
-KNOWN ISSUES: group codes occasionally do not open or toggle language correctly.
 *************************************************************
 
 Developer tools: 
@@ -25,7 +25,7 @@ https://developer.mozilla.org/en-US/Add-ons
 
 TEST SOME CODES HERE:
 
-Hatoful Boyfriend -Hatoful complete edition-  
+Hatoful Boyfriend -Hatoful complete edition- (Product Code)  
 - pigeon dating simulator?  
 [English]  RE091090  
 [Japanese] RJ091090  
@@ -33,11 +33,10 @@ Hatoful Boyfriend -Hatoful complete edition-
 [Case Insensitive] rj091090  
 [Number only] 091090  
 
-PacoProject  
+PacoProject (Group Code)  
 - strange alpacas  
 [Group Code]        RG15719  
-[Case Insensitive]  rg15719 
-[Number only]  		15719 
+[Case Insensitive]  rg15719  
 
 *************************************************************
 
