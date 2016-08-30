@@ -133,15 +133,27 @@ function languageToggle() {
       tabs.activeTab.url = active.replace(eng,home);
     } else if (active.includes(home)){
       tabs.activeTab.url = active.replace(home,eng);
+    } else if (active.includes(comic)){
+      tabs.activeTab.url = active.replace(comic,eng);
+    } else if (active.includes(soft)){
+      tabs.activeTab.url = active.replace(soft,eng);
     } else if (active.includes(ecchi)){
       tabs.activeTab.url = active.replace(ecchi,maniax);
     } else if (active.includes(maniax)){
       tabs.activeTab.url = active.replace(maniax,ecchi);
+    } else if (active.includes(books)){
+      tabs.activeTab.url = active.replace(books,ecchi);
+    } else if (active.includes(pro)){
+      tabs.activeTab.url = active.replace(pro,ecchi);
     } else if (active.includes(gayEng)){
       tabs.activeTab.url = active.replace(gayEng,gay);
     } else if (active.includes(gay)){
       tabs.activeTab.url = active.replace(gay,gayEng);
-    } 
+    } else if (active.includes(girls)){
+      tabs.activeTab.url = active.replace(girls,gayEng);
+    } else if (active.includes(girlsPro)){
+      tabs.activeTab.url = active.replace(girlsPro,gayEng);
+    }
 
   }
 }
