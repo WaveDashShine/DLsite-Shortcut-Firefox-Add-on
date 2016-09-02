@@ -32,6 +32,7 @@ Hatoful Boyfriend -Hatoful complete edition- (Product Code)
 [Case Insensitive] re091090  
 [Case Insensitive] rj091090  
 [Number only] 091090  
+[Not code: should not open] 1234567890
 
 PacoProject (Group Code)  
 - strange alpacas  
