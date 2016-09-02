@@ -58,6 +58,9 @@ var langMenu = cm.Item({
 1) Returns TRUE if selected text contains dlsite product code
 ***/
 function isProductCode(data){
+  if (data.selectionText === null) {
+    return false;
+  }
   var match = data.selectionText.match(regex);
   if (match) {
     return true;
