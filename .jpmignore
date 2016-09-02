@@ -1,6 +1,7 @@
 # Ignore .DS_Store files created by mac
 .DS_Store
 .jpmignore
+.gitignore
 
 # Ignore any zip or xpi files
 *.zip
