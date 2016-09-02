@@ -8,8 +8,9 @@ var cm = require("sdk/context-menu");
 1) product code
 2) product code (number only)
 3) group code
+*) \b specifies boundary
 ***/
-var regex = /(R|V|B)(J|E)\d{6}|\d{6}|(R|V|B)(G)\d{5}/gi;
+var regex = /(R|V|B)(J|E)\d{6}|\b\d{6}\b|(R|V|B)(G)\d{5}/gi;
 
 /*** DLsite URL structures:
 1) product code
@@ -57,13 +58,11 @@ var langMenu = cm.Item({
 1) Returns TRUE if selected text contains dlsite product code
 ***/
 function isProductCode(data){
-  if (data.selectionText === null) {
-    return false;
-  }
   var match = data.selectionText.match(regex);
   if (match) {
     return true;
   }
+  return false;
 }
 
 /*** DLSITE BUTTON 
@@ -99,6 +98,7 @@ function openHome() {
 1) loads DLsite.com in new tab if active tab does not have DLsite open
 2) if product code is detected in URL, toggles the region language
 *) replace(): replaces only the first match in the string
+PENDING: fleshed out language toggle feature
 ***/
 function languageToggle() {
   // variables for the product codes and various language conversion
