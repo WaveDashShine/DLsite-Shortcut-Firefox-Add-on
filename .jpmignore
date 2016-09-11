@@ -2,6 +2,7 @@
 .DS_Store
 .jpmignore
 .gitignore
+.idea/
 
 # Ignore any zip or xpi files
 *.zip
