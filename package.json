@@ -10,7 +10,8 @@
     "fennec": ">=38.0a1"
   },
   "permissions": {
-    "private-browsing": true
+    "private-browsing": true,
+    "multiprocess": true
   },
   "license": "MIT",
   "keywords": [

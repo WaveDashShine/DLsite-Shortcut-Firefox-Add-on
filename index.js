@@ -1,5 +1,4 @@
 var self = require("sdk/self");
-var selection = require("sdk/selection");
 var buttons = require('sdk/ui/button/action');
 var tabs = require("sdk/tabs");
 var cm = require("sdk/context-menu");
