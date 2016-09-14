@@ -37,7 +37,7 @@ Developers Edition requires a path, on a mac:
 TEST SOME CODES HERE:
 
 **Hatoful Boyfriend -Hatoful complete edition- (Product Code)**  
-*pigeon dating simulator?* 
+*pigeon dating simulator?*  
 -[English]  RE091090  
 -[Japanese] RJ091090  
 -[Case Insensitive] re091090  
