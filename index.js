@@ -20,37 +20,40 @@ var dlsite = "http://www.dlsite.com/home/work/=/product_id/";
 var dlsiteNum = "http://www.dlsite.com/home/work/=/product_id/RJ";
 var dlsiteGroup = "http://www.dlsite.com/maniax/circle/profile/=/maker_id/";
 
+
+/*** CONTEXT MENU LANGUAGE TOGGLE
+ 1) context menu item to toggle between ENG and JP
+ *) currently only compatible with RE and RJ codes
+ ***/
+var langMenu = cm.Item({
+  label: "日本語 ↔ English",
+  image: self.data.url("./DL2-16.png"),
+  contentScript: 'self.on("click", function () {' +
+  '  self.postMessage();' +
+  '});',
+  onMessage: function () {
+    languageToggle();
+  },
+  context: cm.URLContext("*.dlsite.com")
+});
+
 /*** CONTEXT MENU OPEN IN DLSITE
 1) context menu item to open product codes in DLsite
 ***/
 // dlMenu.parentMenu.items[0].destroy(); if you need to destroy the cm.Item
 var dlMenu = cm.Item({
-  label: "Open in DLsite",
+  label: "Open in DLsite 開",
   image: self.data.url("./DL-16.png"),
   contentScript: 'self.on("click", function () {' +
                  '  var text = window.getSelection().toString();' +
                  '  self.postMessage(text);' +
+                 // '  var numberFound = text.match(regex).length;' +
+                 // '  return "Open in DLsite 開: " + numberFound;' +
                  '});',
   onMessage: function (selectionText) {
     openDLsite(selectionText);
   },
   context: [cm.PredicateContext(isProductCode), cm.SelectionContext()]
-});
-
-/*** CONTEXT MENU LANGUAGE TOGGLE
-1) context menu item to toggle between ENG and JP
-*) currently only compatible with RE and RJ codes
-***/
-var langMenu = cm.Item({
-  label: "Toggle language",
-  image: self.data.url("./DL-16.png"),
-  contentScript: 'self.on("click", function () {' +
-                 '  self.postMessage();' +
-                 '});',
-  onMessage: function () {
-    languageToggle();
-  },
-  context: cm.URLContext("*.dlsite.com")
 });
 
 /*** PREDICATE FUNCTION FOR CONTEXT MENU
