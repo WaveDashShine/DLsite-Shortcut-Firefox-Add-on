@@ -1,6 +1,5 @@
 #DLsite Shortcut 
 - Authored to Firefox hotmail account
-- 
 
 Select any number of DLsite product codes, and open them to DLsite with the context menu (right click).
 
