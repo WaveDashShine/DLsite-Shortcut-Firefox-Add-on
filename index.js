@@ -1,5 +1,4 @@
 var self = require("sdk/self");
-var selection = require("sdk/selection");
 var buttons = require('sdk/ui/button/action');
 var tabs = require("sdk/tabs");
 var cm = require("sdk/context-menu");
@@ -21,37 +20,55 @@ var dlsite = "http://www.dlsite.com/home/work/=/product_id/";
 var dlsiteNum = "http://www.dlsite.com/home/work/=/product_id/RJ";
 var dlsiteGroup = "http://www.dlsite.com/maniax/circle/profile/=/maker_id/";
 
+/*** VARIOUS CONTENT SCRIPTS FOR THE CONTEXT MENU
+ ***/
+var basicPostScript = 'self.on("click", function (node, data) {' +
+    '  self.postMessage();' +
+    '});';
+
+var postSelectionScript = 'self.on("click", function (node, data) {' +
+    '  var text = window.getSelection().toString();' +
+    '  self.postMessage(text);' +
+    '});';
+
+// Regex needs \\ double backslash to prevent string escape from breaking content script
+// Warning: updates to the above regex need to be repeated below
+var numberFoundScript = 'self.on("context", function () {' +
+    '  var selected = window.getSelection().toString();' +
+    '  var regex = /(R|V|B)(J|E)\\d{6}|\\b\\d{6}\\b|(R|V|B)(G)\\d{5}/gi;' +
+    '  var found = selected.match(regex);' +
+    '  if (found) { var foundNum = found.length; ' +
+    '  return "Open DLsite 開: " + foundNum; }' +
+    '  else return "Open DLsite 開";' +
+    '});';
+
+/*** CONTEXT MENU LANGUAGE TOGGLE
+ 1) context menu item to toggle between ENG and JP
+ *) currently only compatible with RE and RJ codes
+ ***/
+// TODO: prevent language toggle from showing at the navigation page
+var langMenu = cm.Item({
+  label: "日本語 ↔ English",
+  context: cm.URLContext("*.dlsite.com"),
+  image: self.data.url("./DL2-16.png"),
+  contentScript: basicPostScript,
+  onMessage: function () {
+    languageToggle();
+  }
+});
+
 /*** CONTEXT MENU OPEN IN DLSITE
 1) context menu item to open product codes in DLsite
 ***/
 // dlMenu.parentMenu.items[0].destroy(); if you need to destroy the cm.Item
 var dlMenu = cm.Item({
-  label: "Open in DLsite",
+  label: "Open DLsite 開",
+  context: [cm.PredicateContext(isProductCode), cm.SelectionContext()],
   image: self.data.url("./DL-16.png"),
-  contentScript: 'self.on("click", function () {' +
-                 '  var text = window.getSelection().toString();' +
-                 '  self.postMessage(text);' +
-                 '});',
+  contentScript: postSelectionScript + numberFoundScript,
   onMessage: function (selectionText) {
     openDLsite(selectionText);
-  },
-  context: [cm.PredicateContext(isProductCode), cm.SelectionContext()]
-});
-
-/*** CONTEXT MENU LANGUAGE TOGGLE
-1) context menu item to toggle between ENG and JP
-*) currently only compatible with RE and RJ codes
-***/
-var langMenu = cm.Item({
-  label: "Toggle language",
-  image: self.data.url("./DL-16.png"),
-  contentScript: 'self.on("click", function () {' +
-                 '  self.postMessage();' +
-                 '});',
-  onMessage: function () {
-    languageToggle();
-  },
-  context: cm.URLContext("*.dlsite.com")
+  }
 });
 
 /*** PREDICATE FUNCTION FOR CONTEXT MENU
