@@ -34,6 +34,8 @@ var postSelectionScript = 'self.on("click", function (node, data) {' +
 // Regex needs \\ double backslash to prevent string escape from breaking content script
 // Warning: updates to the above regex need to be repeated below
 var numberFoundScript = 'self.on("context", function () {' +
+// TODO: wrap in selected exists if statement
+// then we may not need the if found afterwords
     '  var selected = window.getSelection().toString();' +
     '  var regex = /(R|V|B)(J|E)\\d{6}|\\b\\d{6}\\b|(R|V|B)(G)\\d{5}/gi;' +
     '  var found = selected.match(regex);' +
@@ -67,6 +69,7 @@ var dlMenu = cm.Item({
   image: self.data.url("./DL-16.png"),
   contentScript: postSelectionScript + numberFoundScript,
   onMessage: function (selectionText) {
+      // TODO: refactor code to save space from rematching code, use helper function
     openDLsite(selectionText);
   }
 });
@@ -212,6 +215,7 @@ function openDLsiteHelper(array){
 *) match() returns an array object if match is found, null otherwise
 ***/
 function openDLsite(text){
+    // TODO: make sure text exists before matching
   var matchArray = text.toString().match(regex);
   openDLsiteHelper(matchArray);
 }
