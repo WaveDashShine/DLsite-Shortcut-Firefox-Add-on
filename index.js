@@ -5,11 +5,10 @@ var cm = require("sdk/context-menu");
 
 /*** DLsite REGEX, parts separated in order:
 1) product code
-2) product code (number only)
-3) group code
+2) group code
 *) \b specifies boundary
 ***/
-var regex = /(R|V|B)(J|E)\d{6}|\b\d{6}\b|(R|V|B)(G)\d{5}/gi;
+var regex = /(R|V|B)(J|E)\d{6}|(R|V|B)(G)\d{5}/gi;
 
 /*** DLsite URL structures:
 1) product code
@@ -46,7 +45,6 @@ var numberFoundScript = 'self.on("context", function () {' +
  1) context menu item to toggle between ENG and JP
  *) currently only compatible with RE and RJ codes
  ***/
-// TODO: prevent language toggle from showing at the navigation page
 var langMenu = cm.Item({
   label: "日本語 ↔ English",
   context: cm.URLContext("*.dlsite.com"),
@@ -71,7 +69,7 @@ var dlMenu = cm.Item({
   }
 });
 
-/*** PREDICATE FUNCTION FOR CONTEXT MENU
+/*** PRODUCT CODE PREDICATE FUNCTION FOR CONTEXT MENU
 1) Returns TRUE if selected text contains dlsite product code
 ***/
 function isProductCode(data){
@@ -83,6 +81,15 @@ function isProductCode(data){
     return true;
   }
   return false;
+}
+
+//TODO: context menu doesn't appear if not on toggleable page
+/*** DLSITE HOMEPAGE PREDICATE FUNCTION FOR CONTEXT MENU
+ 1) Returns TRUE if page on DLsite can be toggled
+ ***/
+function isDLsite(data){
+    //stub
+    return false;
 }
 
 /*** DLSITE BUTTON 
