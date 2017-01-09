@@ -5,11 +5,10 @@ var cm = require("sdk/context-menu");
 
 /*** DLsite REGEX, parts separated in order:
 1) product code
-2) product code (number only)
-3) group code
+2) group code
 *) \b specifies boundary
 ***/
-var regex = /(R|V|B)(J|E)\d{6}|\b\d{6}\b|(R|V|B)(G)\d{5}/gi;
+var regex = /(R|V|B)(J|E)\d{6}|(R|V|B)(G)\d{5}/gi;
 
 /*** DLsite URL structures:
 1) product code
@@ -48,7 +47,6 @@ var numberFoundScript = 'self.on("context", function () {' +
  1) context menu item to toggle between ENG and JP
  *) currently only compatible with RE and RJ codes
  ***/
-// TODO: prevent language toggle from showing at the navigation page
 var langMenu = cm.Item({
   label: "日本語 ↔ English",
   context: cm.URLContext("*.dlsite.com"),
@@ -74,7 +72,7 @@ var dlMenu = cm.Item({
   }
 });
 
-/*** PREDICATE FUNCTION FOR CONTEXT MENU
+/*** PRODUCT CODE PREDICATE FUNCTION FOR CONTEXT MENU
 1) Returns TRUE if selected text contains dlsite product code
 ***/
 function isProductCode(data){
@@ -86,6 +84,15 @@ function isProductCode(data){
     return true;
   }
   return false;
+}
+
+//TODO: context menu doesn't appear if not on toggleable page
+/*** DLSITE HOMEPAGE PREDICATE FUNCTION FOR CONTEXT MENU
+ 1) Returns TRUE if page on DLsite can be toggled
+ ***/
+function isDLsite(data){
+    //stub
+    return false;
 }
 
 /*** DLSITE BUTTON 
@@ -123,6 +130,7 @@ function openHome() {
 *) replace(): replaces only the first match in the string
 PENDING: fleshed out language toggle feature
 ***/
+// TODO: this function is deprecated
 function languageToggle() {
   // variables for the product codes and various language conversion
   // case 1:
@@ -139,8 +147,8 @@ function languageToggle() {
   var books = "/books";
   var pro = "/pro";
   // case 4:
-  var gayEng = "/gay-eng";
-  var gay = "/gay";
+  var blEng = "/gay-eng";
+  var bl = "/gay";
   var girls = "/girls";
   var girlsPro = "/girls-pro";
 
@@ -168,14 +176,14 @@ function languageToggle() {
       tabs.activeTab.url = active.replace(books,ecchi);
     } else if (active.includes(pro)){
       tabs.activeTab.url = active.replace(pro,ecchi);
-    } else if (active.includes(gayEng)){
-      tabs.activeTab.url = active.replace(gayEng,gay);
-    } else if (active.includes(gay)){
-      tabs.activeTab.url = active.replace(gay,gayEng);
+    } else if (active.includes(blEng)){
+      tabs.activeTab.url = active.replace(blEng,bl);
+    } else if (active.includes(bl)){
+      tabs.activeTab.url = active.replace(bl,blEng);
     } else if (active.includes(girlsPro)){
-      tabs.activeTab.url = active.replace(girlsPro,gayEng);
+      tabs.activeTab.url = active.replace(girlsPro,blEng);
     } else if (active.includes(girls)){
-      tabs.activeTab.url = active.replace(girls,gayEng);
+      tabs.activeTab.url = active.replace(girls,blEng);
     } 
 
   }
@@ -193,6 +201,7 @@ function isNumber(n){
 2) depending on product code or group code
 3) if product code is number only, default to RJ
 ***/
+// TODO: open DLsite should open in private window if selection is made in private window
 function openDLsiteHelper(array){
 
   if(array){

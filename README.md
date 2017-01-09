@@ -1,14 +1,15 @@
 #DLsite Shortcut 
 ######- Authored to Firefox hotmail account
 
+###TODO: application is deprecated once multiprocess firefox is released. Need to refactor to WebExtension instead:
+https://developer.mozilla.org/en-US/Add-ons/WebExtensions
+
 Select any number of DLsite product codes, and open them to DLsite with the context menu (right click).
 
 Language toggle available on DLsite with either the button or context menu (right click).
 Switch from the Japanese version to the English version of the site, provided that a mirror exists, and vice versa.
 
 Group codes default to the Japanese maniax website.  
-
-Number only codes default to RJ codes
 
 Click the button to open the DLsite homepage if you're not on DLsite already.
 *************************************************************
@@ -41,9 +42,8 @@ Developers Edition requires a path, on a mac:
 -[Japanese] RJ091090  
 -[Case Insensitive] re091090  
 -[Case Insensitive] rj091090  
--[Number only] 091090  
 -[Not code: should not open] 1234567890  
-#####*should open 5 product links above*
+#####*should open 4 product links above*
 
 **PacoProject (Group Code)**  
 **strange alpaca game*  
@@ -51,7 +51,7 @@ Developers Edition requires a path, on a mac:
 -[Case Insensitive]  rg15719  
 #####*should open 2 group links above*
   
-  Selecting all should open 7 links total
+  Selecting all should open 6 links total
 
 *************************************************************
 
