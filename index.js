@@ -127,6 +127,7 @@ function openHome() {
 *) replace(): replaces only the first match in the string
 PENDING: fleshed out language toggle feature
 ***/
+// TODO: this function is deprecated
 function languageToggle() {
   // variables for the product codes and various language conversion
   // case 1:
@@ -143,8 +144,8 @@ function languageToggle() {
   var books = "/books";
   var pro = "/pro";
   // case 4:
-  var gayEng = "/gay-eng";
-  var gay = "/gay";
+  var blEng = "/gay-eng";
+  var bl = "/gay";
   var girls = "/girls";
   var girlsPro = "/girls-pro";
 
@@ -172,14 +173,14 @@ function languageToggle() {
       tabs.activeTab.url = active.replace(books,ecchi);
     } else if (active.includes(pro)){
       tabs.activeTab.url = active.replace(pro,ecchi);
-    } else if (active.includes(gayEng)){
-      tabs.activeTab.url = active.replace(gayEng,gay);
-    } else if (active.includes(gay)){
-      tabs.activeTab.url = active.replace(gay,gayEng);
+    } else if (active.includes(blEng)){
+      tabs.activeTab.url = active.replace(blEng,bl);
+    } else if (active.includes(bl)){
+      tabs.activeTab.url = active.replace(bl,blEng);
     } else if (active.includes(girlsPro)){
-      tabs.activeTab.url = active.replace(girlsPro,gayEng);
+      tabs.activeTab.url = active.replace(girlsPro,blEng);
     } else if (active.includes(girls)){
-      tabs.activeTab.url = active.replace(girls,gayEng);
+      tabs.activeTab.url = active.replace(girls,blEng);
     } 
 
   }
@@ -197,6 +198,7 @@ function isNumber(n){
 2) depending on product code or group code
 3) if product code is number only, default to RJ
 ***/
+// TODO: open DLsite should open in private window if selection is made in private window
 function openDLsiteHelper(array){
 
   if(array){
