@@ -1,4 +1,4 @@
-#DLsite Shortcut 
+#DLsite Shortcut (DEPRECATED)
 ######- Authored to Firefox hotmail account
 
 ###TODO: application is deprecated once multiprocess firefox is released. Need to refactor to WebExtension instead:
