@@ -146,7 +146,6 @@ function openHome() {
 *) replace(): replaces only the first match in the string
 PENDING: fleshed out language toggle feature
 ***/
-
 // TODO: this function is deprecated REQUIRES MASSIVE OVERHAUL
 function languageToggle() {
   // variables for the product codes and various language conversion
