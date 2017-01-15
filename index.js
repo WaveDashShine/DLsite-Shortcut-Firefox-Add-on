@@ -1,7 +1,9 @@
+// DEPRECATED requires refactoring to WEBEXTENSION
 var self = require("sdk/self");
 var buttons = require('sdk/ui/button/action');
 var tabs = require("sdk/tabs");
 var cm = require("sdk/context-menu");
+// TODO: add pageworker sdk
 
 /*** DLsite REGEX, parts separated in order:
 1) product code
@@ -47,6 +49,7 @@ var numberFoundScript = 'self.on("context", function () {' +
  1) context menu item to toggle between ENG and JP
  *) currently only compatible with RE and RJ codes
  ***/
+// TODO: verfiy unicode compatibility
 var langMenu = cm.Item({
   label: "日本語 ↔ English",
   context: cm.URLContext("*.dlsite.com"),
@@ -60,6 +63,7 @@ var langMenu = cm.Item({
 /*** CONTEXT MENU OPEN IN DLSITE
 1) context menu item to open product codes in DLsite
 ***/
+// TODO: verfiy unicode compatibility
 // dlMenu.parentMenu.items[0].destroy(); if you need to destroy the cm.Item
 var dlMenu = cm.Item({
   label: "Open DLsite 開",
@@ -86,13 +90,25 @@ function isProductCode(data){
   return false;
 }
 
-//TODO: context menu doesn't appear if not on toggleable page
+//TODO: context menu doesn't appear if not on language toggleable page
 /*** DLSITE HOMEPAGE PREDICATE FUNCTION FOR CONTEXT MENU
- 1) Returns TRUE if page on DLsite can be toggled
+ 1) Returns TRUE if page on DLsite can be language toggled
  ***/
 function isDLsite(data){
     //stub
     return false;
+}
+
+//TODO: New page worker function for verifying if DLsite language toggle reached is a proper product page
+/* SHOWS LANGUAGE TOGGLE OPTION IN CONTEXT MENU DROPDOWN UNDER THE LANGUAGE TOGGLE OPTION
+ 1) Different cases based on URL for each of the product based on their location in the different DLsite sections
+ 2) Display toggle language option in context menu based on their valid location in other online DLsite sections
+ */
+//TODO: take performance into consideration if page worker is used
+function pageWorkerLanguageToggle(){
+    // stub
+    // requires context menu predicate function
+    // requires some data structure for manauging the different cases
 }
 
 /*** DLSITE BUTTON 
@@ -130,7 +146,7 @@ function openHome() {
 *) replace(): replaces only the first match in the string
 PENDING: fleshed out language toggle feature
 ***/
-// TODO: this function is deprecated
+// TODO: this function is deprecated REQUIRES MASSIVE OVERHAUL
 function languageToggle() {
   // variables for the product codes and various language conversion
   // case 1:
@@ -225,6 +241,8 @@ function openDLsiteHelper(array){
 ***/
 function openDLsite(text){
     // TODO: make sure text exists before matching
+    // above TODO should be covered by the context menu predicate function
+    // VERIFY ONCE SWITCHED TO WEBEXTENSION
   var matchArray = text.toString().match(regex);
   openDLsiteHelper(matchArray);
 }
