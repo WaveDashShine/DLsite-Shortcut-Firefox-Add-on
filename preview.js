@@ -7,6 +7,19 @@ function preview(request, sender, sendResponse) {
     browser.runtime.onMessage.removeListener(preview);
 }
 
+function matchCodes(){
+    // stub
+}
+
+function loadPreviews(){
+    // stub
+}
+
+function removePreviews(){
+    // stub
+}
+
+
 /* BLANKS THE PAGE
 1) verifies that the script has been loaded since console.log() doesn't work
  */

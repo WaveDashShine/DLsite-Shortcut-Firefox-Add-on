@@ -113,6 +113,7 @@ function previewDLsite(){
         file: "/preview.js"
     });
 
+    // TODO: send regex and state of toggle as message to preview.js
     var thisTab = browser.tabs.query({active: true, currentWindow: true});
     thisTab.then(function(tabs){
         browser.tabs.sendMessage(tabs[0].id, {data: "preview"}, function(response){
