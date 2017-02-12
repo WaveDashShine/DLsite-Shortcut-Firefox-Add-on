@@ -2,12 +2,14 @@
 browser.runtime.onMessage.addListener(preview);
 
 function preview(request, sender, sendResponse) {
-    // console logs don't work here
-    removeEverything();
+    //removeEverything();
     sendResponse({preview: "Preview has been toggled"});
-    //browser.runtime.onMessage.removeListener(preview);
+    browser.runtime.onMessage.removeListener(preview);
 }
 
+/* BLANKS THE PAGE
+1) verifies that the script has been loaded since console.log() doesn't work
+ */
 function removeEverything() {
     while (document.body.firstChild) {
         document.body.firstChild.remove();
