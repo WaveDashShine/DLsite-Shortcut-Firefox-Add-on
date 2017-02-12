@@ -15,11 +15,16 @@
   "permissions": [
     "tabs",
     "contextMenus",
-    "activeTab"
+    "activeTab",
+    "<all_urls>"
   ],
 
   "browser_action": {
-    "default_icon": "icons/DL-32.png",
+    "default_icon": {
+      "16": "icons/DL-16.png",
+      "32": "icons/DL-32.png",
+      "48": "icon.png"
+    },
     "default_title": "DLsite Shortcut",
     "default_popup": "popup/menu.html"
   },
