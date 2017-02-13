@@ -1,18 +1,43 @@
 // Preview DLsite products
+// sendResponse only works once
+// requires the onMessage Listener
+// console log doesn't work here
 browser.runtime.onMessage.addListener(preview);
 
 function preview(request, sender, sendResponse) {
     //removeEverything();
-    sendResponse({preview: "Preview has been toggled"});
+    var matchArray = matchCodes(request.regex);
+    if (matchArray !== typeof "undefined" && matchArray !== null){
+        loadPreviews(matchArray);
+    }
+    sendResponse({preview: matchArray.toString()});
     browser.runtime.onMessage.removeListener(preview);
 }
 
-function matchCodes(){
+function matchCodes(regex){
+    return document.body.textContent.match(regex);
+}
+
+function loadPreviews(array){
+    for (var i = 0; i < array.length; i++) {
+        if(array[i].toUpperCase().includes("G")){
+            //stub
+        } else {
+            // stub
+        }
+    }
+}
+
+function getProductImage(produceCode){
     // stub
 }
 
-function loadPreviews(){
+function getGroupImage(groupCode){
     // stub
+}
+
+function loadDLsiteDocument(){
+    //stub
 }
 
 function removePreviews(){

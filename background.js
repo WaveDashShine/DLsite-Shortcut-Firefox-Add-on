@@ -43,6 +43,7 @@ browser.contextMenus.create({
 browser.contextMenus.onClicked.addListener(function(info, tab) {
     switch (info.menuItemId){
         case "shortcut":
+            console.log(info.selectionText);
             openDLsite(info.selectionText);
             break;
         case "preview":
@@ -73,23 +74,11 @@ function isNumber(n){
 /* HELPER for opening DLsite
  1) opens sanitized group or product code in DLsite
  */
-function openDLsiteHelper(array){
-
-    if(array !== typeof "undefined" && array !== null){
-
-        for (var i = 0; i < array.length; i++) {
-
-            if(array[i].includes("G") || array[i].includes("g")){
-                var group = browser.tabs.create({
-                    url: dlsiteGroup+array[i].toUpperCase()
-                });
-            } else {
-                var product = browser.tabs.create({
-                    url: dlsiteProduct+array[i].toUpperCase()
-                });
-            }
-        }
-    }
+// TODO: don't open duplicates? var opened = []
+function openDLsiteHelper(url, code){
+    var group = browser.tabs.create({
+        url: url + code
+    });
 }
 
 /* OPEN DLsite
@@ -98,8 +87,17 @@ function openDLsiteHelper(array){
  *) match() returns an array object if match is found, null otherwise
  */
 function openDLsite(text){
-    var matchArray = text.toString().match(regex);
-    openDLsiteHelper(matchArray);
+    var array = text.toString().match(regex);
+    console.log(array);
+    if(array !== typeof "undefined" && array !== null){
+        for (var i = 0; i < array.length; i++) {
+            if(array[i].toUpperCase().includes("G")){
+                openDLsiteHelper(dlsiteGroup, array[i].toUpperCase());
+            } else {
+                openDLsiteHelper(dlsiteProduct, array[i].toUpperCase());
+            }
+        }
+    }
 }
 
 /* TODO: ACTIVATES PREVIEWS FOR DLSITE PRODUCT AND GROUP CODES
@@ -113,10 +111,10 @@ function previewDLsite(){
         file: "/preview.js"
     });
 
-    // TODO: send regex and state of toggle as message to preview.js
+    // TODO: send state of toggle as message to preview.js
     var thisTab = browser.tabs.query({active: true, currentWindow: true});
     thisTab.then(function(tabs){
-        browser.tabs.sendMessage(tabs[0].id, {data: "preview"}, function(response){
+        browser.tabs.sendMessage(tabs[0].id, {regex: regex}, function(response){
             console.log("response was " + response.preview);
         });
     });
