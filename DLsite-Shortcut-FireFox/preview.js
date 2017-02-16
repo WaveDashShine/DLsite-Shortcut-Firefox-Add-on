@@ -54,6 +54,7 @@ function handleText(textNode) {
         var btn = document.createElement("IMG"); // stub
         btn.setAttribute("src", "https://img.dlsite.jp/modpub/images2/work/doujin/RJ182000/RJ181758_img_main.jpg");
         textNode.parentNode.insertBefore(btn, splitNode);
+        // synchronous -> return the URL somehow?
         getDLsiteImage();
     }
 }
@@ -74,9 +75,11 @@ function getDLsiteImage(){
             // stub
             var xhrText = xhr.responseText; // returns truncated response
             var parser = new DOMParser();
-            var doc = parser.parseFromString(xhrText, "text/xml");
-            var imageURL = doc.getElementsByClassName("slider_item_active").src;
-            var i = imageURL;
+            var doc = parser.parseFromString(xhrText, "text/html");
+            var imageURL = doc.querySelectorAll('[class="slider_item active"]')[0].innerHTML;
+            // <img src="//img.dlsite.jp/modpub/images2/work/doujin/RJ159000/RJ158551_img_main.jpg" width="560" height="420">
+            var i = imageURL.src; // undefined TODO: extract via regex parser, from src="// to "
+            var breakpoint = i;
             //document.getElementsByClassName("slider_item active");
         }
     };
