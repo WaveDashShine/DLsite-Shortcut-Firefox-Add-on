@@ -72,15 +72,16 @@ function getDLsiteImage(){
     xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) { // readyState 4 == DONE
             // stub
-            var xhrDoc = xhr.responseXML;
-            var xhrText = xhr.responseText; // returns some weird response??
-            var image = xhrDoc.getElementsByClassName("slider_item_active");
-            var breakpoint = xhr;
+            var xhrText = xhr.responseText; // returns truncated response
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(xhrText, "text/xml");
+            var imageURL = doc.getElementsByClassName("slider_item_active").src;
+            var i = imageURL;
             //document.getElementsByClassName("slider_item active");
         }
     };
-
-    xhr.open("GET", "http://www.dlsite.com/eng/work/=/product_id/RE158551");
+    var testURL = "http://www.dlsite.com/eng/work/=/product_id/RE158551";
+    xhr.open("GET", testURL, true);
     xhr.send();
 }
 
