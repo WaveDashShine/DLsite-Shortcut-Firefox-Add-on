@@ -64,13 +64,6 @@ function isProductCode(data){
     return data.selectionText.match(regex) !== null;
 }
 
-/* NUMBER CHECKER
- 1) returns true if variable is a number
- */
-function isNumber(n){
-    return !isNaN(n);
-}
-
 /* HELPER for opening DLsite
  1) opens sanitized group or product code in DLsite
  */

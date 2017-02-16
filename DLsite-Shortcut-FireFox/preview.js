@@ -20,22 +20,6 @@ function preview(request, sender, sendResponse) {
     browser.runtime.onMessage.removeListener(preview);
 }
 
-function getProductImage(produceCode){
-    // stub
-}
-
-function getGroupImage(groupCode){
-    // stub
-}
-
-function loadDLsiteDocument(){
-    //stub
-}
-
-function removePreviews(){
-    // stub
-}
-
 /* WALKS THROUGH DOCUMENT AND HANDLES ONLY VISIBLE TEXT ON PAGE
 Following code referenced from stackoverflow.com
 /questions/5904914/javascript-regex-to-replace-text-not-in-html-attributes/5904945#5904945
@@ -62,27 +46,44 @@ function walk(node) {
     }
 }
 
-// How to replace text with HTML element?
-// split? create element? we can't use textnode right? splitText?
-// splitText and normalize can be used to split text nodes and concat them
+// TODO: does not handle multiple matches within a text node
 function handleText(textNode) {
-    // use recursion instead of FOR LOOP?
-    var tempNode = textNode;
-    var textNodeMatches = tempNode.nodeValue.match(regexDLsite);
+    var textNodeMatches = textNode.nodeValue.match(regexDLsite);
     if (textNodeMatches !== typeof "undefined" && textNodeMatches !== null){
-        for (i = 0; i < textNodeMatches.length; i++) {
-            var splitNode = tempNode.splitText(tempNode.nodeValue.indexOf(textNodeMatches[i])); // stub
-            var btn = document.createElement("BUTTON"); // stub
-            btn.appendChild(document.createTextNode("TESTING")); // stub
-            textNode.parentNode.insertBefore(btn, splitNode);
-
-        }
+        var splitNode = textNode.splitText(textNode.nodeValue.indexOf(textNodeMatches[0]));
+        var btn = document.createElement("IMG"); // stub
+        btn.setAttribute("src", "https://img.dlsite.jp/modpub/images2/work/doujin/RJ182000/RJ181758_img_main.jpg");
+        textNode.parentNode.insertBefore(btn, splitNode);
+        getDLsiteImage();
     }
-
-    //var test = "<h1>test</h1>";
-    //textNode.nodeValue = textNode.nodeValue.replace(regexDLsite, test);
 }
 
-function getOffsetOfMatches(){
-    //stub
+function getProductImage(productCode){
+    // stub
+}
+
+function getGroupImage(groupCode){
+    // stub
+}
+
+function getDLsiteImage(){
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) { // readyState 4 == DONE
+            // stub
+            var xhrDoc = xhr.responseXML;
+            var xhrText = xhr.responseText; // returns some weird response??
+            var image = xhrDoc.getElementsByClassName("slider_item_active");
+            var breakpoint = xhr;
+            //document.getElementsByClassName("slider_item active");
+        }
+    };
+
+    xhr.open("GET", "http://www.dlsite.com/eng/work/=/product_id/RE158551");
+    xhr.send();
+}
+
+function removePreviews(){
+    // stub
 }

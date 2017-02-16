@@ -16,7 +16,8 @@
     "tabs",
     "contextMenus",
     "activeTab",
-    "<all_urls>"
+    "http://*/",
+    "https://*/"
   ],
 
   "browser_action": {
