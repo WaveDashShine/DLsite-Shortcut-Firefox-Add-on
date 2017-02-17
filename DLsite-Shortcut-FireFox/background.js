@@ -5,8 +5,8 @@ var regex = /(R|V|B)((J|E)\d{6}|(G)\d{5})/gi;
 /* DLsite URLs
  */
 var homepage = "http://www.dlsite.com/";
-var dlsiteProduct = homepage + "home/work/=/product_id/";
-var dlsiteGroup = homepage + "maniax/circle/profile/=/maker_id/";
+var dlsiteProductUrl = homepage + "home/work/=/product_id/";
+var dlsiteGroupUrl = homepage + "maniax/circle/profile/=/maker_id/";
 
 /*
  VARIOUS CONTENT SCRIPTS FOR THE CONTEXT MENU
@@ -85,9 +85,9 @@ function openDLsite(text){
     if(array !== typeof "undefined" && array !== null){
         for (var i = 0; i < array.length; i++) {
             if(array[i].toUpperCase().includes("G")){
-                openDLsiteHelper(dlsiteGroup, array[i].toUpperCase());
+                openDLsiteHelper(dlsiteGroupUrl, array[i].toUpperCase());
             } else {
-                openDLsiteHelper(dlsiteProduct, array[i].toUpperCase());
+                openDLsiteHelper(dlsiteProductUrl, array[i].toUpperCase());
             }
         }
     }
@@ -107,7 +107,11 @@ function previewDLsite(){
     // TODO: send state of toggle as message to preview.js
     var thisTab = browser.tabs.query({active: true, currentWindow: true});
     thisTab.then(function(tabs){
-        browser.tabs.sendMessage(tabs[0].id, {regex: regex}, function(response){
+        browser.tabs.sendMessage(tabs[0].id, {
+            regex: regex,
+            dlsiteProductUrl: dlsiteProductUrl,
+            dlsiteGroupUrl: dlsiteGroupUrl
+        }, function(response){
             console.log("response was " + response.preview);
         });
     });
