@@ -70,7 +70,7 @@ function getGroupImage(groupCode){
 function getDLsiteImage(){
     var xhr = new XMLHttpRequest();
 
-    xhr.onreadystatechange = function() {
+/*    xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) { // readyState 4 == DONE
             // stub
             var xhrText = xhr.responseText; // returns truncated response
@@ -82,10 +82,20 @@ function getDLsiteImage(){
             var breakpoint = i;
             //document.getElementsByClassName("slider_item active");
         }
-    };
+    };*/
     var testURL = "http://www.dlsite.com/eng/work/=/product_id/RE158551";
-    xhr.open("GET", testURL, true);
-    xhr.send();
+    xhr.open("GET", testURL, false); // false = sync
+    xhr.send(null);
+    if (xhr.status == 200){
+        var xhrText = xhr.responseText; // returns truncated response
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(xhrText, "text/html");
+        var imageURL = doc.querySelectorAll('[class="slider_item active"]')[0].innerHTML;
+        // <img src="//img.dlsite.jp/modpub/images2/work/doujin/RJ159000/RJ158551_img_main.jpg" width="560" height="420">
+        var i = imageURL.src; // undefined TODO: extract via regex parser, from src="// to "
+        var breakpoint = i;
+    }
+    // TODO: convert to synchronous function? requires post message?
 }
 
 function removePreviews(){
