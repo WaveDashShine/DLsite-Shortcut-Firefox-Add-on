@@ -58,7 +58,7 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
  1) Returns TRUE if selected text contains dlsite product code
  */
 function isProductCode(data){
-    if (data === typeof "undefined" || data.selectionText === null) {
+    if (typeof data === "undefined" || data.selectionText === null) {
         return false;
     }
     return data.selectionText.match(regex) !== null;
@@ -82,7 +82,7 @@ function openDLsiteHelper(url, code){
 function openDLsite(text){
     var array = text.toString().match(regex);
     console.log(array);
-    if(array !== typeof "undefined" && array !== null){
+    if(typeof array !== "undefined" && array !== null){
         for (var i = 0; i < array.length; i++) {
             if(array[i].toUpperCase().includes("G")){
                 openDLsiteHelper(dlsiteGroupUrl, array[i].toUpperCase());
