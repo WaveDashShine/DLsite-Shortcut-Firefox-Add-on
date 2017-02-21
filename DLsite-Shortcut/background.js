@@ -16,7 +16,7 @@ var dlsiteGroupUrl = homepage + "maniax/circle/profile/=/maker_id/";
  1) context menu item to open group or product codes in DLsite
  */
 // TODO: selection based on matching regex
-browser.contextMenus.create({
+chrome.contextMenus.create({
     id: "shortcut",
     title: "Open DLsite 開",
     contexts: ["selection"]
@@ -26,7 +26,7 @@ browser.contextMenus.create({
  1) context menu item to preview group or product codes in DLsite
  */
 // TODO: how to toggle script? maybe just don't toggle it and load it when clicked
-browser.contextMenus.create({
+chrome.contextMenus.create({
     id: "preview",
     //type: "checkbox",
     //checked: false,
@@ -40,7 +40,7 @@ browser.contextMenus.create({
 /* LISTENER FOR THE CONTEXT MENUS
  1) handles the behaviour of each context menu item
  */
-browser.contextMenus.onClicked.addListener(function(info, tab) {
+chrome.contextMenus.onClicked.addListener(function(info, tab) {
     switch (info.menuItemId){
         case "shortcut":
             console.log(info.selectionText);
@@ -69,7 +69,7 @@ function isProductCode(data){
  */
 // TODO: don't open duplicates? var opened = []
 function openDLsiteHelper(url, code){
-    var group = browser.tabs.create({
+    var group = chrome.tabs.create({
         url: url + code
     });
 }
@@ -100,14 +100,13 @@ function openDLsite(text){
  */
 function previewDLsite(){
 
-    browser.tabs.executeScript({
+    chrome.tabs.executeScript({
         file: "/preview.js"
     });
 
     // TODO: send state of toggle as message to preview.js
-    var thisTab = browser.tabs.query({active: true, currentWindow: true});
-    thisTab.then(function(tabs){
-        browser.tabs.sendMessage(tabs[0].id, {
+    chrome.tabs.query({active: true, currentWindow: true},function(tabs){
+        chrome.tabs.sendMessage(tabs[0].id, {
             regex: regex,
             dlsiteProductUrl: dlsiteProductUrl,
             dlsiteGroupUrl: dlsiteGroupUrl
@@ -115,6 +114,7 @@ function previewDLsite(){
             console.log("response was " + response.preview);
         });
     });
+
 }
 
 // TODO: web_accessible_resources for language toggle? or injection of DLsite images?

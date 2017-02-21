@@ -2,7 +2,7 @@
 // sendResponse only works once
 // requires the onMessage Listener
 // console log doesn't work here
-browser.runtime.onMessage.addListener(preview);
+chrome.runtime.onMessage.addListener(preview);
 
 var regexDLsite;
 var dlsiteProductUrl;
@@ -21,7 +21,7 @@ function preview(request, sender, sendResponse) {
         walk(document.body);
     }
     sendResponse({preview: matchArray.toString()});
-    browser.runtime.onMessage.removeListener(preview);
+    chrome.runtime.onMessage.removeListener(preview);
 }
 
 /* WALKS THROUGH DOCUMENT AND HANDLES ONLY VISIBLE TEXT ON PAGE
@@ -79,7 +79,7 @@ function handleText(textNode) {
 function getDLsiteProductImageSrc(url){
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, false); // false = sync
-    xhr.send(null);
+    xhr.send();
     if (xhr.status == 200){
         var xhrText = xhr.responseText;
         var parser = new DOMParser();

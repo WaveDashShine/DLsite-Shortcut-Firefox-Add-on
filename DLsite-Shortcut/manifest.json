@@ -27,7 +27,7 @@
       "48": "icon.png"
     },
     "default_title": "DLsite Shortcut",
-    "default_popup": "popup/menu.html"
+    "default_popup": "menu/menu.html"
   },
 
   "background": {
