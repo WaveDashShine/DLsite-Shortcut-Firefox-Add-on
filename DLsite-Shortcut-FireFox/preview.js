@@ -17,7 +17,7 @@ function preview(request, sender, sendResponse) {
     dlsiteGroupUrl = request.dlsiteGroupUrl;
     // consider using another method to verify that body contains DLsite codes
     var matchArray = document.body.textContent.match(regexDLsite);
-    if (matchArray !== typeof "undefined" && matchArray !== null){
+    if (typeof matchArray !== "undefined" && matchArray !== null){
         walk(document.body);
     }
     sendResponse({preview: matchArray.toString()});
@@ -58,7 +58,7 @@ function walk(node) {
 // TODO: does not handle group codes
 function handleText(textNode) {
     var textNodeMatches = textNode.nodeValue.match(regexDLsite);
-    if (textNodeMatches !== typeof "undefined" && textNodeMatches !== null){
+    if (typeof textNodeMatches !== "undefined" && textNodeMatches !== null){
         var splitNode = textNode.splitText(textNode.nodeValue.indexOf(textNodeMatches[0]));
         // TODO: refactor creating element to smaller helper methods
         var previewImage = document.createElement("IMG");
