@@ -1,6 +1,6 @@
 /* DLsite REGEX, covers group code and product code
  */
-var regex = /(R|V|B)((J|E)\d{6}|(G)\d{5})/gi;
+var regexDLsite = /(R|V|B)((J|E)\d{6}|(G)\d{5})/gi;
 
 /* DLsite URLs
  */
@@ -61,7 +61,7 @@ function isProductCode(data){
     if (typeof data === "undefined" || data.selectionText === null) {
         return false;
     }
-    return data.selectionText.match(regex) !== null;
+    return data.selectionText.match(regexDLsite) !== null;
 }
 
 /* HELPER for opening DLsite
@@ -80,7 +80,7 @@ function openDLsiteHelper(url, code){
  *) match() returns an array object if match is found, null otherwise
  */
 function openDLsite(text){
-    var array = text.toString().match(regex);
+    var array = text.toString().match(regexDLsite);
     console.log(array);
     if(typeof array !== "undefined" && array !== null){
         for (var i = 0; i < array.length; i++) {
@@ -107,7 +107,7 @@ function previewDLsite(){
     // TODO: send state of toggle as message to preview.js
     chrome.tabs.query({active: true, currentWindow: true},function(tabs){
         chrome.tabs.sendMessage(tabs[0].id, {
-            regex: regex,
+            regex: regexDLsite,
             dlsiteProductUrl: dlsiteProductUrl,
             dlsiteGroupUrl: dlsiteGroupUrl
         }, function(response){
