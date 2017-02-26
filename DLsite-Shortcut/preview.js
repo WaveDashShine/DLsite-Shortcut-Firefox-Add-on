@@ -43,7 +43,7 @@ function walk(node) {
             }
             break;
         case 3: // Text node
-            if(node.parentElement.tagName.toLowerCase() != "script") {
+            if(node.parentElement.tagName.toLowerCase() != "script") { //XSS protection
                 handleText(node);
             }
             break;
@@ -54,29 +54,37 @@ function walk(node) {
 1) Inserts image before the text appearance
 2) Image links to DLsite Page
  */
-// TODO: does not handle multiple matches within a text node
+// TODO: does not handle multiple matches within a single text node
 // TODO: does not handle group codes
 function handleText(textNode) {
     var textNodeMatches = textNode.nodeValue.match(regexDLsite);
     if (typeof textNodeMatches !== "undefined" && textNodeMatches !== null){
         var splitNode = textNode.splitText(textNode.nodeValue.indexOf(textNodeMatches[0]));
-        // TODO: refactor creating element to smaller helper methods
-        var previewImage = document.createElement("IMG");
-        var previewLink = document.createElement("A");
-        var imageObj = getDLsiteProductImageSrc(dlsiteProductUrl + textNodeMatches[0].toUpperCase());
-        previewImage.setAttribute("src", "https://"+imageObj.source);
-        previewLink.setAttribute("href", imageObj.pageUrl);
-        previewLink.appendChild(previewImage);
-        textNode.parentNode.insertBefore(previewLink, splitNode);
+        var imageObj = getDLsiteProductImageData(dlsiteProductUrl + textNodeMatches[0].toUpperCase());
+        var previewImageLink = createImageLinkFromDLsiteImageData(imageObj);
+        textNode.parentNode.insertBefore(previewImageLink, splitNode);
     }
 }
+
+/* CREATES CLICKABLE IMAGE LINKING TO DLSITE
+1) requires image data with IMG "source" and "pageURL" LINK
+2) returns the HTML image element with src attribute
+ */
+function createImageLinkFromDLsiteImageData(imageObj){
+    var previewImage = document.createElement("IMG");
+    var previewLink = document.createElement("A");
+    previewImage.setAttribute("src", "https://" + imageObj.source);
+    previewLink.setAttribute("href", imageObj.pageUrl);
+    return previewLink.appendChild(previewImage);
+}
+
 /* GETS THE IMAGE SOURCE IF IT IS A PROUDCT
 1) XHR to DLsite URL
 2) Parses HTML to find product image
 3) returns the src to the product image
 *) DOES NOT WORK ON SOME SITES DUE TO CROSS ORIGIN POLICY
  */
-function getDLsiteProductImageSrc(url){
+function getDLsiteProductImageData(url){
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, false); // false = sync
     xhr.send();

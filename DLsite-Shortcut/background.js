@@ -107,6 +107,7 @@ function previewDLsite(){
     // TODO: send state of toggle as message to preview.js
     chrome.tabs.query({active: true, currentWindow: true},function(tabs){
         chrome.tabs.sendMessage(tabs[0].id, {
+            action: "matchDOM",
             regex: regexDLsite,
             dlsiteProductUrl: dlsiteProductUrl,
             dlsiteGroupUrl: dlsiteGroupUrl
