@@ -2,13 +2,31 @@
 // sendResponse only works once
 // requires the onMessage Listener
 // console log doesn't work here
-chrome.runtime.onMessage.addListener(preview);
+chrome.runtime.onMessage.addListener(handleRequestData);
 
 var regexDLsite;
 var dlsiteProductUrl;
 var dlsiteGroupUrl;
 // found the URL regex online, removed the query strings since those are irrelevant for our purposes
 var regexUrl = /\b((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+)\b/;
+
+function handleRequestData(request, sender, sendResponse){
+    switch (request.action){
+        case "getDocument":
+            sendDocument(request, sender, sendResponse);
+            break;
+        case "preview":
+            preview(request, sender, sendResponse);
+            break;
+        default:
+            alert("ERROR: request data was not handled correctly");
+    }
+    chrome.runtime.onMessage.removeListener(handleRequestData);
+}
+
+function sendDocument(request, sender, sendResponse){
+    // stub
+}
 
 function preview(request, sender, sendResponse) {
     // TODO: initialize global variables function(response)
@@ -20,8 +38,7 @@ function preview(request, sender, sendResponse) {
     if (typeof matchArray !== "undefined" && matchArray !== null){
         walk(document.body);
     }
-    sendResponse({preview: matchArray.toString()});
-    chrome.runtime.onMessage.removeListener(preview);
+    sendResponse({preview: matchArray.toString()}); // stub
 }
 
 /* WALKS THROUGH DOCUMENT AND HANDLES ONLY VISIBLE TEXT ON PAGE
@@ -44,7 +61,7 @@ function walk(node) {
             break;
         case 3: // Text node
             if(node.parentElement.tagName.toLowerCase() != "script") { //XSS protection
-                handleText(node);
+                insertPreviewImageAtText(node);
             }
             break;
     }
@@ -56,7 +73,7 @@ function walk(node) {
  */
 // TODO: does not handle multiple matches within a single text node
 // TODO: does not handle group codes
-function handleText(textNode) {
+function insertPreviewImageAtText(textNode) {
     var textNodeMatches = textNode.nodeValue.match(regexDLsite);
     if (typeof textNodeMatches !== "undefined" && textNodeMatches !== null){
         var splitNode = textNode.splitText(textNode.nodeValue.indexOf(textNodeMatches[0]));

@@ -50,7 +50,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
             previewDLsite();
             break;
         default:
-            console.log("ERROR: No DLsite Context Menu id was matched");
+            alert("ERROR: No DLsite Context Menu id was matched");
     }
 });
 
@@ -107,12 +107,12 @@ function previewDLsite(){
     // TODO: send state of toggle as message to preview.js
     chrome.tabs.query({active: true, currentWindow: true},function(tabs){
         chrome.tabs.sendMessage(tabs[0].id, {
-            action: "matchDOM",
+            action: "preview",
             regex: regexDLsite,
             dlsiteProductUrl: dlsiteProductUrl,
             dlsiteGroupUrl: dlsiteGroupUrl
         }, function(response){
-            console.log("response was " + response.preview);
+            console.log("response was " + response.preview); // stub
         });
     });
 
