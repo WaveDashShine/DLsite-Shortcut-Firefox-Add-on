@@ -14,10 +14,10 @@ var regexUrl = /\b((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+)\b/;
  */
 function handleRequestData(request, sender, sendResponse){
     switch (request.action){
-        case "getDocument":
+        case "previewGetDocument":
             sendDocument(request, sender, sendResponse);
             break;
-        case "insertImage":
+        case "previewInsertImage":
             insertImage(request, sender, sendResponse);
             chrome.runtime.onMessage.removeListener(handleRequestData);
             break;
@@ -96,7 +96,7 @@ function insertPreviewImageAtText(textNode) {
 }
 
 /*
-
+TODO: THIS METHOD IS TOO SLOW
  */
 function getMatchingImageObjectFromArray(productCode){
     for (i = 0; i < images.length; i++){

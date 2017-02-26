@@ -49,12 +49,13 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
             previewDLsite();
             break;
         default:
-            alert("ERROR: No DLsite Context Menu id was matched");
+            alert("ERROR: No Context Menu id was matched");
     }
 });
 
 /* PRODUCT CODE PREDICATE FUNCTION FOR CONTEXT MENU
  1) Returns TRUE if selected text contains dlsite product code
+ TODO: look into context menu predicates
  */
 function isProductCode(data){
     if (typeof data === "undefined" || data.selectionText === null) {
@@ -80,7 +81,6 @@ function openDLsiteHelper(url){
 // TODO: don't open duplicates? var opened = []
 function openDLsite(text){
     var array = text.toString().match(regexDLsite);
-    console.log(array);
     if(typeof array !== "undefined" && array !== null){
         for (var i = 0; i < array.length; i++) {
             if(array[i].toUpperCase().includes("G")){
@@ -104,7 +104,7 @@ function previewDLsite(){
     });
 
     sendRequestToTab({
-        action: "getDocument"
+        action: "previewGetDocument"
     });
 }
 
@@ -126,19 +126,19 @@ function sendRequestToTab(requestObject){
  */
 function handleResponseData(response){
     switch (response.action){
-        case "getDocument":
+        case "previewGetDocument":
             var matchArray = response.documentTextContent.match(regexDLsite);
             if (typeof matchArray !== "undefined" && matchArray !== null){
                 // TODO: send state of toggle as message to preview.js
                 var images = getImageObjectsFromMatchArray(matchArray);
                 sendRequestToTab({
-                    action: "insertImage",
+                    action: "previewInsertImage",
                     regex: regexDLsite,
                     images: images
                 });
             }
             break;
-        case "insertImage":
+        case "previewInsertImage":
             // stub
             break;
         default:
