@@ -6,10 +6,13 @@ chrome.runtime.onMessage.addListener(handleRequestData);
 
 var regexDLsite;
 var dlsiteProductUrl;
-var dlsiteGroupUrl;
+var dlsiteGroupUrl; // TODO: group URLs are currently unhandled
 // found the URL regex online, removed the query strings since those are irrelevant for our purposes
 var regexUrl = /\b((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+)\b/;
 
+/*
+
+ */
 function handleRequestData(request, sender, sendResponse){
     switch (request.action){
         case "getDocument":
@@ -17,17 +20,27 @@ function handleRequestData(request, sender, sendResponse){
             break;
         case "preview":
             preview(request, sender, sendResponse);
+            chrome.runtime.onMessage.removeListener(handleRequestData);
             break;
         default:
             alert("ERROR: request data was not handled correctly");
     }
-    chrome.runtime.onMessage.removeListener(handleRequestData);
 }
 
+/*/
+
+ */
 function sendDocument(request, sender, sendResponse){
     // stub
+    sendResponse({
+        action: request.action,
+        documentTextContent: document.body.textContent
+    });
 }
 
+/*
+
+ */
 function preview(request, sender, sendResponse) {
     // TODO: initialize global variables function(response)
     regexDLsite = request.regex;

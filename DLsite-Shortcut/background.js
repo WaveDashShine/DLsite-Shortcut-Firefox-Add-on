@@ -2,15 +2,14 @@
  */
 var regexDLsite = /(R|V|B)((J|E)\d{6}|(G)\d{5})/gi;
 
+// found the URL regex online, removed the query strings since those are irrelevant for our purposes
+var regexUrl = /\b((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+)\b/;
+
 /* DLsite URLs
  */
 var homepage = "http://www.dlsite.com/";
 var dlsiteProductUrl = homepage + "home/work/=/product_id/";
 var dlsiteGroupUrl = homepage + "maniax/circle/profile/=/maker_id/";
-
-/*
- VARIOUS CONTENT SCRIPTS FOR THE CONTEXT MENU
- */
 
 /* CONTEXT MENU: OPEN IN DLSITE
  1) context menu item to open group or product codes in DLsite
@@ -67,10 +66,9 @@ function isProductCode(data){
 /* HELPER for opening DLsite
  1) opens sanitized group or product code in DLsite
  */
-// TODO: don't open duplicates? var opened = []
-function openDLsiteHelper(url, code){
+function openDLsiteHelper(url){
     var group = chrome.tabs.create({
-        url: url + code
+        url: url
     });
 }
 
@@ -79,15 +77,16 @@ function openDLsiteHelper(url, code){
  2) if DLsite code is number only, default RJ page
  *) match() returns an array object if match is found, null otherwise
  */
+// TODO: don't open duplicates? var opened = []
 function openDLsite(text){
     var array = text.toString().match(regexDLsite);
     console.log(array);
     if(typeof array !== "undefined" && array !== null){
         for (var i = 0; i < array.length; i++) {
             if(array[i].toUpperCase().includes("G")){
-                openDLsiteHelper(dlsiteGroupUrl, array[i].toUpperCase());
+                openDLsiteHelper(dlsiteGroupUrl + array[i].toUpperCase());
             } else {
-                openDLsiteHelper(dlsiteProductUrl, array[i].toUpperCase());
+                openDLsiteHelper(dlsiteProductUrl + array[i].toUpperCase());
             }
         }
     }
@@ -104,18 +103,46 @@ function previewDLsite(){
         file: "/preview.js"
     });
 
-    // TODO: send state of toggle as message to preview.js
+    sendRequestToTab({
+        action: "getDocument"
+    });
+}
+
+/*
+
+ */
+function sendRequestToTab(requestObject){
     chrome.tabs.query({active: true, currentWindow: true},function(tabs){
-        chrome.tabs.sendMessage(tabs[0].id, {
-            action: "preview",
-            regex: regexDLsite,
-            dlsiteProductUrl: dlsiteProductUrl,
-            dlsiteGroupUrl: dlsiteGroupUrl
-        }, function(response){
+        chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response){
             console.log("response was " + response.preview); // stub
+            handleResponseData(response);
         });
     });
+}
 
+/*
+
+ */
+function handleResponseData(response){
+    switch (response.action){
+        case "getDocument":
+            var matchArray = response.documentTextContent.match(regexDLsite);
+            if (typeof matchArray !== "undefined" && matchArray !== null){
+                // TODO: send state of toggle as message to preview.js
+                sendRequestToTab({
+                    action: "preview",
+                    regex: regexDLsite,
+                    dlsiteProductUrl: dlsiteProductUrl,
+                    dlsiteGroupUrl: dlsiteGroupUrl
+                });
+            }
+            break;
+        case "preview":
+            // stub
+            break;
+        default:
+            alert("ERROR: could not handle response");
+    }
 }
 
 // TODO: web_accessible_resources for language toggle? or injection of DLsite images?
