@@ -114,8 +114,9 @@ function previewDLsite(){
 function sendRequestToTab(requestObject){
     chrome.tabs.query({active: true, currentWindow: true},function(tabs){
         chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response){
-            console.log("response was " + response.preview); // stub
-            handleResponseData(response);
+            if (typeof response !== "undefined" && response !== null){
+                handleResponseData(response);
+            }
         });
     });
 }
@@ -129,20 +130,57 @@ function handleResponseData(response){
             var matchArray = response.documentTextContent.match(regexDLsite);
             if (typeof matchArray !== "undefined" && matchArray !== null){
                 // TODO: send state of toggle as message to preview.js
+                var images = getImageObjectsFromMatchArray(matchArray);
                 sendRequestToTab({
-                    action: "preview",
+                    action: "insertImage",
                     regex: regexDLsite,
-                    dlsiteProductUrl: dlsiteProductUrl,
-                    dlsiteGroupUrl: dlsiteGroupUrl
+                    images: images
                 });
             }
             break;
-        case "preview":
+        case "insertImage":
             // stub
             break;
         default:
-            alert("ERROR: could not handle response");
+            alert("ERROR: could not handle response action");
     }
 }
 
-// TODO: web_accessible_resources for language toggle? or injection of DLsite images?
+/*
+TODO: CURRENT IMPLMENTATION IS TOO SLOW NEED TO SEND MESSAGE WITH ONE IMAGE AT A TIME TO APPEND
+*/
+function getImageObjectsFromMatchArray(matchArray){
+    var imageObjectArray = [];
+    for (i = 0; i < matchArray.length; i++){
+        var imageObject = getDLsiteProductCodeImageData(matchArray[i].toUpperCase());
+        imageObjectArray.push(imageObject);
+    }
+    return imageObjectArray;
+}
+
+/* GETS THE IMAGE SOURCE IF IT IS A PROUDCT
+ 1) XHR to DLsite URL
+ 2) Parses HTML to find product image
+ 3) returns the src to the product image
+ *) DOES NOT WORK ON SOME SITES DUE TO CROSS ORIGIN POLICY
+ */
+function getDLsiteProductCodeImageData(productCode){
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", dlsiteProductUrl + productCode, false); // false = sync
+    xhr.send();
+    if (xhr.status == 200){
+        var xhrText = xhr.responseText;
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(xhrText, "text/html");
+        var imageHtml = doc.querySelectorAll('[class="slider_item active"]')[0].innerHTML;
+        var imageSrc = imageHtml.match(regexUrl);
+        return {
+            productCode: productCode,
+            source: imageSrc[0],
+            pageUrl :xhr.responseURL
+        };
+    } else {
+        // TODO: return 404 error or error image?
+        return "";
+    }
+}

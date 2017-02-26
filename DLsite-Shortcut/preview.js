@@ -5,8 +5,7 @@
 chrome.runtime.onMessage.addListener(handleRequestData);
 
 var regexDLsite;
-var dlsiteProductUrl;
-var dlsiteGroupUrl; // TODO: group URLs are currently unhandled
+var images;
 // found the URL regex online, removed the query strings since those are irrelevant for our purposes
 var regexUrl = /\b((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+)\b/;
 
@@ -18,8 +17,8 @@ function handleRequestData(request, sender, sendResponse){
         case "getDocument":
             sendDocument(request, sender, sendResponse);
             break;
-        case "preview":
-            preview(request, sender, sendResponse);
+        case "insertImage":
+            insertImage(request, sender, sendResponse);
             chrome.runtime.onMessage.removeListener(handleRequestData);
             break;
         default:
@@ -41,17 +40,17 @@ function sendDocument(request, sender, sendResponse){
 /*
 
  */
-function preview(request, sender, sendResponse) {
-    // TODO: initialize global variables function(response)
+function insertImage(request, sender, sendResponse) {
+    initializeGlobalVariables(request);
+    walk(document.body);
+    sendResponse({action: request.action});
+}
+/*
+
+ */
+function initializeGlobalVariables(request){
     regexDLsite = request.regex;
-    dlsiteProductUrl = request.dlsiteProductUrl;
-    dlsiteGroupUrl = request.dlsiteGroupUrl;
-    // consider using another method to verify that body contains DLsite codes
-    var matchArray = document.body.textContent.match(regexDLsite);
-    if (typeof matchArray !== "undefined" && matchArray !== null){
-        walk(document.body);
-    }
-    sendResponse({preview: matchArray.toString()}); // stub
+    images = request.images;
 }
 
 /* WALKS THROUGH DOCUMENT AND HANDLES ONLY VISIBLE TEXT ON PAGE
@@ -90,9 +89,20 @@ function insertPreviewImageAtText(textNode) {
     var textNodeMatches = textNode.nodeValue.match(regexDLsite);
     if (typeof textNodeMatches !== "undefined" && textNodeMatches !== null){
         var splitNode = textNode.splitText(textNode.nodeValue.indexOf(textNodeMatches[0]));
-        var imageObj = getDLsiteProductImageData(dlsiteProductUrl + textNodeMatches[0].toUpperCase());
+        var imageObj = getMatchingImageObjectFromArray(textNodeMatches[0].toUpperCase());
         var previewImageLink = createImageLinkFromDLsiteImageData(imageObj);
         textNode.parentNode.insertBefore(previewImageLink, splitNode);
+    }
+}
+
+/*
+
+ */
+function getMatchingImageObjectFromArray(productCode){
+    for (i = 0; i < images.length; i++){
+        if (productCode == images[i].productCode){
+            return images[i];
+        }
     }
 }
 
@@ -108,28 +118,4 @@ function createImageLinkFromDLsiteImageData(imageObj){
     return previewLink.appendChild(previewImage);
 }
 
-/* GETS THE IMAGE SOURCE IF IT IS A PROUDCT
-1) XHR to DLsite URL
-2) Parses HTML to find product image
-3) returns the src to the product image
-*) DOES NOT WORK ON SOME SITES DUE TO CROSS ORIGIN POLICY
- */
-function getDLsiteProductImageData(url){
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, false); // false = sync
-    xhr.send();
-    if (xhr.status == 200){
-        var xhrText = xhr.responseText;
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(xhrText, "text/html");
-        var imageHtml = doc.querySelectorAll('[class="slider_item active"]')[0].innerHTML;
-        var imageSrc = imageHtml.match(regexUrl);
-        return {
-            source: imageSrc[0],
-            pageUrl:xhr.responseURL
-        };
-    } else {
-        // TODO: return 404 error or error image?
-        return "";
-    }
-}
+
