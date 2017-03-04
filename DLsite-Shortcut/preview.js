@@ -111,8 +111,8 @@ function getMatchingImageObjectFromArray(productCode){
 2) returns the HTML image element with src attribute
  */
 function createImageLinkFromDLsiteImageData(imageObj){
-    var previewImage = document.createElement("IMG");
-    var previewLink = document.createElement("A");
+    var previewImage = document.createElement("img");
+    var previewLink = document.createElement("a");
     previewImage.setAttribute("src", "https://" + imageObj.source);
     previewLink.setAttribute("href", imageObj.pageUrl);
     return previewLink.appendChild(previewImage);
