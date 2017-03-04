@@ -1,11 +1,11 @@
 {
 
   "manifest_version": 2,
-  "name": "DLsite Shortcut",
+  "name": "__MSG_extensionName__",
   "version": "1.0",
 
-  "description": "Select any number of DLsite product codes, and open them to DLsite with the context menu (right click). Language toggle available on DLsite with either the button or context menu (right click). Switch from the Japanese version to the English version of the site, provided that a mirror exists, and vice versa. Group codes default to the Japanese maniax website. Click the button to open the DLsite homepage if you're not on DLsite already.",
-  "homepage_url": "https://github.com/WaveDashShine/DLsite-Shortcut-Firefox-Add-on",
+  "description": "__MSG_extensionDescription__",
+  "homepage_url": "https://github.com/WaveDashShine/DLsite-Shortcut-WebExtension",
   "icons": {
     "16": "icons/DL-16.png",
     "32": "icons/DL-32.png",
@@ -26,12 +26,14 @@
       "32": "icons/DL-32.png",
       "48": "icon.png"
     },
-    "default_title": "DLsite Shortcut",
+    "default_title": "__MSG_extensionName__",
     "default_popup": "menu/menu.html"
   },
 
   "background": {
     "scripts": ["background.js"]
-  }
+  },
+
+  "default_locale": "en"
 
 }

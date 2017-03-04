@@ -14,7 +14,8 @@ var regexUrl = /\b((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+)\b/;
  */
 function handleRequestData(request, sender, sendResponse){
     switch (request.action){
-        case "previewGetDocument":
+        case "previewGetMatches":
+            // TODO: handle match arrays
             sendDocument(request, sender, sendResponse);
             break;
         case "previewInsertImage":

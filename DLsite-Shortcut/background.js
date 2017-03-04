@@ -17,7 +17,7 @@ var dlsiteGroupUrl = homepage + "maniax/circle/profile/=/maker_id/";
 // TODO: selection based on matching regex
 chrome.contextMenus.create({
     id: "shortcut",
-    title: "Open DLsite 開",
+    title: chrome.i18n.getMessage("contextMenuOpenDLsite"),
     contexts: ["selection"]
 });
 
@@ -29,7 +29,7 @@ chrome.contextMenus.create({
     id: "preview",
     //type: "checkbox",
     //checked: false,
-    title: "Preview DLsite",
+    title: chrome.i18n.getMessage("contextMenuPreview"),
     contexts: ["all"]
 });
 
@@ -104,7 +104,7 @@ function previewDLsite(){
     });
 
     sendRequestToTab({
-        action: "previewGetDocument"
+        action: "previewGetMatches"
     });
 }
 
@@ -126,7 +126,8 @@ function sendRequestToTab(requestObject){
  */
 function handleResponseData(response){
     switch (response.action){
-        case "previewGetDocument":
+        case "previewGetMatches":
+            // TODO: handle match arrays
             var matchArray = response.documentTextContent.match(regexDLsite);
             if (typeof matchArray !== "undefined" && matchArray !== null){
                 // TODO: send state of toggle as message to preview.js

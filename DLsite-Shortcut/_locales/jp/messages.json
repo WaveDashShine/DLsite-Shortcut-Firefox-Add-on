@@ -1,0 +1,27 @@
+{
+  "extensionName": {
+    "message": "STUB",
+    "description": "JAPAN"
+  },
+
+  "extensionDescription": {
+    "message": "TODO",
+    "description": "TODO."
+  },
+
+  "notificationTitle": {
+    "message": "TODO",
+    "description": "TODO."
+  },
+
+  "notificationContent": {
+    "message": "TODO $URL$.",
+    "description": "TODO",
+    "placeholders": {
+      "url" : {
+        "content" : "$1",
+        "example" : "https://developer.mozilla.org"
+      }
+    }
+  }
+}
