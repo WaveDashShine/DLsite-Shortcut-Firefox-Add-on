@@ -1,0 +1,32 @@
+{
+  "extensionName": {
+    "message": "DLsite Shortcut",
+    "description": "Name of the extension."
+  },
+
+  "extensionDescription": {
+    "message": "Shortcut to DLsite product pages and other DLsite features",
+    "description": "Description of the extension."
+  },
+
+  "contextMenuOpenDLsite": {
+    "message": "Open DLsite 開",
+    "description": "Opens selected product codes in new tab."
+  },
+
+  "contextMenuPreview": {
+    "message": "Preview DLsite",
+    "description": "Displays image link to product."
+  },
+
+  "notificationContent": {
+    "message": "STUB: You clicked $URL$.",
+    "description": "Tells the user which link they clicked.",
+    "placeholders": {
+      "url" : {
+        "content" : "$1",
+        "example" : "https://developer.mozilla.org"
+      }
+    }
+  }
+}
