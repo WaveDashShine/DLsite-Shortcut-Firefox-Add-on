@@ -1,40 +1,41 @@
-#DLsite Shortcut (DEPRECATED)
-######- Authored to Firefox hotmail account
+#DLsite Shortcut WebExtension
+###### Add-ons for Firefox: Authored to Hotmail account
+###### Chrome Webstore: Authored to Gmail account
 
-###TODO: application is deprecated once multiprocess firefox is released. Need to refactor to WebExtension instead:
-https://developer.mozilla.org/en-US/Add-ons/WebExtensions
 
-Select any number of DLsite product codes, and open them to DLsite with the context menu (right click).
+## Features:
 
-Language toggle available on DLsite with either the button or context menu (right click).
+- Select any number of DLsite product codes, and open them to DLsite with the context menu (right click).  
+
+- Preview Context Menu option inserts preview image before every instance of DLsite code on webpage.
+
+- (Pending for WebExtension version) Language toggle available on DLsite with either the button or context menu (right click).
 Switch from the Japanese version to the English version of the site, provided that a mirror exists, and vice versa.
 
-Group codes default to the Japanese maniax website.  
-
-Click the button to open the DLsite homepage if you're not on DLsite already.
+- (Pending for WebExtension version) Group codes default to the Japanese maniax website.  
 *************************************************************
 
 ###HOW TO INSTALL:  
-https://addons.mozilla.org/en-US/firefox/addon/dlsite-shortcut/
+https://addons.mozilla.org/en-US/firefox/addon/dlsite-shortcut/ (deprecated Add-on SDK)   
+Pending development and approval by Mozilla and Google
+
+#### To Load from unpackaged source:  
+FireFox: about:debugging#addons  
+Chrome: chrome://extensions/
+************************************************************* 
+
+#### Developer Notes:  
+
+Developed using WebExtensions:  
+https://developer.mozilla.org/en-US/Add-ons/WebExtensions
+
+Referencing this code to walk document for text content:  
+http://stackoverflow.com/questions/5904914/javascript-regex-to-replace-text-not-in-html-attributes
 
 *************************************************************
 
-Developer tools:  
-https://developer.mozilla.org/en-US/Add-ons  
-
-####Developer Notes:  
-*as of Firefox 48, you need to switch to Nightly or Developer builds of Firefox to manually test unsigned addons  
- (the b flag prevents loading of stable Firefox build)*  
- 
- Nightly:
->jpm run -b Nightly  
-
-Developers Edition requires a path, on a mac:
->jpm run -b /Applications/FirefoxDeveloperEdition.app/
-
-*************************************************************
-
-####TEST SOME CODES HERE:
+#### TEST SOME CODES HERE: 
+##### Warning: GitHub's security policy prevents "Preview" Context menu from working
 
 **Hatoful Boyfriend -Hatoful complete edition- (Product Code)**  
 **pigeon dating simulator?*  
@@ -43,15 +44,15 @@ Developers Edition requires a path, on a mac:
 -[Case Insensitive] re091090  
 -[Case Insensitive] rj091090  
 -[Not code: should not open] 1234567890  
-#####*should open 4 product links above*
+##### Should open 4 product links above
 
 **PacoProject (Group Code)**  
 **strange alpaca game*  
 -[Group Code]        RG15719  
 -[Case Insensitive]  rg15719  
-#####*should open 2 group links above*
+##### Should open 2 group links above
   
-  Selecting all should open 6 links total
+Selecting all should open 6 links total
 
 *************************************************************
 
