@@ -1,6 +1,7 @@
 /* DLsite REGEX, covers group code and product code
  */
-var regexDLsite = /(R|V|B)((J|E)\d{6}|(G)\d{5})/gi;
+var regexDLsiteString = "(R|V|B)((J|E)\\d{6}|(G)\\d{5})"; // Chrome compatibility
+var regexDLsite = new RegExp(regexDLsiteString, "gi");
 
 // found the URL regex online, removed the query strings since those are irrelevant for our purposes
 var regexUrl = /\b((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+)\b/;
@@ -25,6 +26,8 @@ chrome.contextMenus.create({
  1) context menu item to preview group or product codes in DLsite
  */
 // TODO: how to toggle script? maybe just don't toggle it and load it when clicked
+// TODO: prevent user from clicking twice
+// Chrome loads the images one at a time, instead of all at once
 chrome.contextMenus.create({
     id: "preview",
     //type: "checkbox",
@@ -105,7 +108,7 @@ function previewDLsite(){
 
     sendRequestToTab({
         action: "previewGetMatches",
-        regex: regexDLsite
+        regex: regexDLsiteString
     });
 }
 
@@ -131,6 +134,7 @@ function handleResponseData(response){
             var matchArray = response.matches;
             if (typeof matchArray !== "undefined" && matchArray !== null){
                 // TODO: send state of toggle as message to preview.js
+                console.log("matchArray Background.js = "+matchArray);
                 getImageObjectsFromMatchArray(matchArray);
             }
             break;

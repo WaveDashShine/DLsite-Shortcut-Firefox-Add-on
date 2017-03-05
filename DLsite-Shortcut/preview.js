@@ -1,13 +1,7 @@
 // Preview DLsite products
 // sendResponse only works once
 // requires the onMessage Listener
-// console log doesn't work here
 chrome.runtime.onMessage.addListener(handleRequestData);
-
-var regexDLsite;
-var images;
-// found the URL regex online, removed the query strings since those are irrelevant for our purposes
-var regexUrl = /\b((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+)\b/;
 
 /*
 
@@ -32,9 +26,12 @@ function handleRequestData(request, sender, sendResponse){
 
  */
 function sendMatches(request, sender, sendResponse){
-    var matchArray = document.body.textContent.match(request.regex);
+    console.log(request.regex);
+    var matchArray = document.body.textContent.match(new RegExp(request.regex, "gi"));
+    console.log("matchArray Preview.js = " + matchArray);
     if (typeof matchArray !== "undefined" && matchArray !== null){
         var uniqueMatches = removeDuplicatesFromArray(matchArray);
+        console.log("uniqueMatches Preview.js = " + uniqueMatches);
         sendResponse({
             action: request.action,
             matches: uniqueMatches
@@ -50,8 +47,7 @@ function removeDuplicatesFromArray(array){
     for (i =0; i < array.length; i++){
         tempSet.add(array[i]);
     }
-    var uniqueArray = Array.from(tempSet);
-    return uniqueArray;
+    return Array.from(tempSet);
 }
 
 /*/
