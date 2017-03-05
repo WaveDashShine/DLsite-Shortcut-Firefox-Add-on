@@ -104,7 +104,8 @@ function previewDLsite(){
     });
 
     sendRequestToTab({
-        action: "previewGetMatches"
+        action: "previewGetMatches",
+        regex: regexDLsite
     });
 }
 
@@ -127,16 +128,10 @@ function sendRequestToTab(requestObject){
 function handleResponseData(response){
     switch (response.action){
         case "previewGetMatches":
-            // TODO: handle match arrays
-            var matchArray = response.documentTextContent.match(regexDLsite);
+            var matchArray = response.matches;
             if (typeof matchArray !== "undefined" && matchArray !== null){
                 // TODO: send state of toggle as message to preview.js
-                var images = getImageObjectsFromMatchArray(matchArray);
-                sendRequestToTab({
-                    action: "previewInsertImage",
-                    regex: regexDLsite,
-                    images: images
-                });
+                getImageObjectsFromMatchArray(matchArray);
             }
             break;
         case "previewInsertImage":
@@ -148,15 +143,16 @@ function handleResponseData(response){
 }
 
 /*
-TODO: CURRENT IMPLMENTATION IS TOO SLOW NEED TO SEND MESSAGE WITH ONE IMAGE AT A TIME TO APPEND
+
 */
 function getImageObjectsFromMatchArray(matchArray){
-    var imageObjectArray = [];
     for (i = 0; i < matchArray.length; i++){
         var imageObject = getDLsiteProductCodeImageData(matchArray[i].toUpperCase());
-        imageObjectArray.push(imageObject);
+        sendRequestToTab({
+            action: "previewInsertImage",
+            imageObject: imageObject
+        });
     }
-    return imageObjectArray;
 }
 
 /* GETS THE IMAGE SOURCE IF IT IS A PROUDCT

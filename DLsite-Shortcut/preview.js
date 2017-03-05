@@ -16,19 +16,32 @@ function handleRequestData(request, sender, sendResponse){
     switch (request.action){
         case "previewGetMatches":
             // TODO: handle match arrays
-            sendDocument(request, sender, sendResponse);
+            sendMatches(request, sender, sendResponse);
             break;
         case "previewInsertImage":
             insertImage(request, sender, sendResponse);
-            chrome.runtime.onMessage.removeListener(handleRequestData);
+            // TODO: remove listener?
+            //chrome.runtime.onMessage.removeListener(handleRequestData);
             break;
         default:
             alert("ERROR: request data was not handled correctly");
     }
 }
 
-/*/
+/*
 
+ */
+function sendMatches(request, sender, sendResponse){
+    var matchArray = document.body.textContent.match(request.regex);
+    if (typeof matchArray !== "undefined" && matchArray !== null){
+        sendResponse({
+            action: request.action,
+            matches: matchArray
+        })
+    }
+}
+/*/
+DEPRECATED
  */
 function sendDocument(request, sender, sendResponse){
     // stub
@@ -42,23 +55,15 @@ function sendDocument(request, sender, sendResponse){
 
  */
 function insertImage(request, sender, sendResponse) {
-    initializeGlobalVariables(request);
-    walk(document.body);
+    walk(document.body, request);
     sendResponse({action: request.action});
-}
-/*
-
- */
-function initializeGlobalVariables(request){
-    regexDLsite = request.regex;
-    images = request.images;
 }
 
 /* WALKS THROUGH DOCUMENT AND HANDLES ONLY VISIBLE TEXT ON PAGE
 Following code referenced from stackoverflow.com
 /questions/5904914/javascript-regex-to-replace-text-not-in-html-attributes/5904945#5904945
  */
-function walk(node) {
+function walk(node, request) {
     var child, next;
 
     switch (node.nodeType) {
@@ -68,13 +73,13 @@ function walk(node) {
             child = node.firstChild;
             while (child) {
                 next = child.nextSibling;
-                walk(child);
+                walk(child, request);
                 child = next;
             }
             break;
         case 3: // Text node
             if(node.parentElement.tagName.toLowerCase() != "script") { //XSS protection
-                insertPreviewImageAtText(node);
+                insertPreviewImageAtText(node, request);
             }
             break;
     }
@@ -86,24 +91,12 @@ function walk(node) {
  */
 // TODO: does not handle multiple matches within a single text node
 // TODO: does not handle group codes
-function insertPreviewImageAtText(textNode) {
-    var textNodeMatches = textNode.nodeValue.match(regexDLsite);
+function insertPreviewImageAtText(textNode, request) {
+    var textNodeMatches = textNode.nodeValue.match(request.imageObject.productCode);
     if (typeof textNodeMatches !== "undefined" && textNodeMatches !== null){
         var splitNode = textNode.splitText(textNode.nodeValue.indexOf(textNodeMatches[0]));
-        var imageObj = getMatchingImageObjectFromArray(textNodeMatches[0].toUpperCase());
-        var previewImageLink = createImageLinkFromDLsiteImageData(imageObj);
+        var previewImageLink = createImageLinkFromDLsiteImageData(request.imageObject);
         textNode.parentNode.insertBefore(previewImageLink, splitNode);
-    }
-}
-
-/*
-TODO: THIS METHOD IS TOO SLOW
- */
-function getMatchingImageObjectFromArray(productCode){
-    for (i = 0; i < images.length; i++){
-        if (productCode == images[i].productCode){
-            return images[i];
-        }
     }
 }
 
