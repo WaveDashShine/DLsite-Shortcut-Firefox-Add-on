@@ -34,12 +34,26 @@ function handleRequestData(request, sender, sendResponse){
 function sendMatches(request, sender, sendResponse){
     var matchArray = document.body.textContent.match(request.regex);
     if (typeof matchArray !== "undefined" && matchArray !== null){
+        var uniqueMatches = removeDuplicatesFromArray(matchArray);
         sendResponse({
             action: request.action,
-            matches: matchArray
+            matches: uniqueMatches
         })
     }
 }
+
+/*
+
+ */
+function removeDuplicatesFromArray(array){
+    var tempSet = new Set();
+    for (i =0; i < array.length; i++){
+        tempSet.add(array[i]);
+    }
+    var uniqueArray = Array.from(tempSet);
+    return uniqueArray;
+}
+
 /*/
 DEPRECATED
  */
@@ -55,8 +69,13 @@ function sendDocument(request, sender, sendResponse){
 
  */
 function insertImage(request, sender, sendResponse) {
-    walk(document.body, request);
-    sendResponse({action: request.action});
+    if (typeof request.imageObject.productCode !== "undefined" && request.imageObject.productCode !== null &&
+        typeof request.imageObject.source !== "undefined" && request.imageObject.source !== null &&
+        typeof request.imageObject.pageUrl !== "undefined" && request.imageObject.pageUrl !== null){
+        walk(document.body, request);
+    }
+
+    //sendResponse({action: request.action});
 }
 
 /* WALKS THROUGH DOCUMENT AND HANDLES ONLY VISIBLE TEXT ON PAGE
@@ -79,7 +98,10 @@ function walk(node, request) {
             break;
         case 3: // Text node
             if(node.parentElement.tagName.toLowerCase() != "script") { //XSS protection
-                insertPreviewImageAtText(node, request);
+                var textNodeMatches = node.nodeValue.match(request.imageObject.productCode);
+                if (typeof textNodeMatches !== "undefined" && textNodeMatches !== null){
+                    insertPreviewImageAtText(node, request);
+                }
             }
             break;
     }
@@ -104,12 +126,14 @@ function insertPreviewImageAtText(textNode, request) {
 1) requires image data with IMG "source" and "pageURL" LINK
 2) returns the HTML image element with src attribute
  */
+// TODO: only image is displayed, no link
 function createImageLinkFromDLsiteImageData(imageObj){
     var previewImage = document.createElement("img");
     var previewLink = document.createElement("a");
     previewImage.setAttribute("src", "https://" + imageObj.source);
     previewLink.setAttribute("href", imageObj.pageUrl);
-    return previewLink.appendChild(previewImage);
+    previewLink.appendChild(previewImage);
+    return previewLink;
 }
 
 

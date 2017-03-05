@@ -148,6 +148,7 @@ function handleResponseData(response){
 function getImageObjectsFromMatchArray(matchArray){
     for (i = 0; i < matchArray.length; i++){
         var imageObject = getDLsiteProductCodeImageData(matchArray[i].toUpperCase());
+        console.log(imageObject.productCode + " " + imageObject.pageUrl + " " + imageObject.source);
         sendRequestToTab({
             action: "previewInsertImage",
             imageObject: imageObject
@@ -155,7 +156,7 @@ function getImageObjectsFromMatchArray(matchArray){
     }
 }
 
-/* GETS THE IMAGE SOURCE IF IT IS A PROUDCT
+/* GETS THE IMAGE SOURCE IF IT IS A PRODUCT
  1) XHR to DLsite URL
  2) Parses HTML to find product image
  3) returns the src to the product image
