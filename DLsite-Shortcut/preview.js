@@ -64,6 +64,7 @@ function sendDocument(request, sender, sendResponse){
 /*
 
  */
+// TODO: insert dummy images when its loading
 function insertImage(request, sender, sendResponse) {
     if (typeof request.imageObject.productCode !== "undefined" && request.imageObject.productCode !== null &&
         typeof request.imageObject.source !== "undefined" && request.imageObject.source !== null &&

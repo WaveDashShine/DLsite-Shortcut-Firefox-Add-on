@@ -1,5 +1,6 @@
 /* DLsite REGEX, covers group code and product code
  */
+// TODO: handle group strings
 var regexDLsiteString = "(R|V|B)((J|E)\\d{6}|(G)\\d{5})"; // Chrome compatibility
 var regexDLsite = new RegExp(regexDLsiteString, "gi");
 
@@ -16,6 +17,7 @@ var dlsiteGroupUrl = homepage + "maniax/circle/profile/=/maker_id/";
  1) context menu item to open group or product codes in DLsite
  */
 // TODO: selection based on matching regex
+// TODO: show number of matches?
 chrome.contextMenus.create({
     id: "shortcut",
     title: chrome.i18n.getMessage("contextMenuOpenDLsite"),
@@ -55,17 +57,6 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
             alert("ERROR: No Context Menu id was matched");
     }
 });
-
-/* PRODUCT CODE PREDICATE FUNCTION FOR CONTEXT MENU
- 1) Returns TRUE if selected text contains dlsite product code
- TODO: look into context menu predicates
- */
-function isProductCode(data){
-    if (typeof data === "undefined" || data.selectionText === null) {
-        return false;
-    }
-    return data.selectionText.match(regexDLsite) !== null;
-}
 
 /* HELPER for opening DLsite
  1) opens sanitized group or product code in DLsite
@@ -183,6 +174,6 @@ function getDLsiteProductCodeImageData(productCode){
         };
     } else {
         // TODO: return 404 error or error image?
-        return "";
+        return null;
     }
 }
