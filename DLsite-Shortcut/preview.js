@@ -30,24 +30,11 @@ function sendMatches(request, sender, sendResponse){
     var matchArray = document.body.textContent.match(new RegExp(request.regex, "gi"));
     console.log("matchArray Preview.js = " + matchArray);
     if (typeof matchArray !== "undefined" && matchArray !== null){
-        var uniqueMatches = removeDuplicatesFromArray(matchArray);
-        console.log("uniqueMatches Preview.js = " + uniqueMatches);
         sendResponse({
             action: request.action,
-            matches: uniqueMatches
+            matches: matchArray
         })
     }
-}
-
-/*
-
- */
-function removeDuplicatesFromArray(array){
-    var tempSet = new Set();
-    for (i =0; i < array.length; i++){
-        tempSet.add(array[i]);
-    }
-    return Array.from(tempSet);
 }
 
 /*/
@@ -123,7 +110,7 @@ function insertPreviewImageAtText(textNode, request) {
 1) requires image data with IMG "source" and "pageURL" LINK
 2) returns the HTML image element with src attribute
  */
-// TODO: only image is displayed, no link
+// TODO: if no image available use a 404 image from somewhere... load image from addon path?
 function createImageLinkFromDLsiteImageData(imageObj){
     var previewImage = document.createElement("img");
     var previewLink = document.createElement("a");
