@@ -154,7 +154,7 @@ function removeDuplicatesFromArray(array){
 function getImageObjectsFromMatchArray(matchArray){
     for (i = 0; i < matchArray.length; i++){
         //TODO: listener for when tabs are closed
-        // TODO: a global set for DLsite product values -- local addon cache?
+        // TODO: a global set for DLsite product values -- storage API
         // TODO: notifications when completed -- API
         var imageObject = getDLsiteProductCodeImageData(matchArray[i].toUpperCase());
         console.log(imageObject.productCode + " " + imageObject.pageUrl + " " + imageObject.source);
