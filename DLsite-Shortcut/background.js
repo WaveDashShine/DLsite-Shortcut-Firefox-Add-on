@@ -69,7 +69,7 @@ function openDLsite(text) {
     var productCodeMatchArray = removeDuplicatesFromArray(text.toString().match(regexDLsite));
     if (isObjectValid(productCodeMatchArray)) {
         for (var i = 0; i < productCodeMatchArray.length; i++) {
-            if (productCodeMatchArray[i].toUpperCase().includes("G")) {
+            if (productCodeMatchArray[i].toUpperCase().indexOf("G") > -1) {
                 openDLsiteProductPageInBrowser(dlsiteGroupUrl + productCodeMatchArray[i].toUpperCase());
             } else {
                 openDLsiteProductPageInBrowser(dlsiteProductUrl + productCodeMatchArray[i].toUpperCase());
@@ -91,13 +91,13 @@ function previewDLsite() {
         file: "/preview.js"
     });
 
-    sendRequestToTab({
+    sendRequestToActiveTab({
         action: "previewGetMatches",
         regex: regexDLsiteString
     });
 }
 
-function sendRequestToTab(requestObject) {
+function sendRequestToActiveTab(requestObject) {
     chrome.tabs.query({active: true, currentWindow: true},function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {
             if (isObjectValid(response)) {
@@ -141,7 +141,7 @@ function getImageObjectsFromMatchArray(matchArray) {
         // TODO: notifications when completed -- API
         var imageObject = getDLsiteProductCodeImageData(matchArray[i].toUpperCase());
         console.log(imageObject.productCode + " " + imageObject.pageUrl + " " + imageObject.source);
-        sendRequestToTab({
+        sendRequestToActiveTab({
             action: "previewInsertImage",
             imageObject: imageObject
         });
@@ -156,7 +156,7 @@ function getImageObjectsFromMatchArray(matchArray) {
  */
 function getDLsiteProductCodeImageData(productCode) {
     var dlsiteProductPageUrl = dlsiteProductUrl + productCode;
-    var responseObject = getHtmlFromUrl(dlsiteProductPageUrl);
+    var responseObject = getResponseObjectFromUrl(dlsiteProductPageUrl);
     if (!isObjectValid(responseObject))
         return null;
     var htmlText = responseObject.responseHtmlText;
@@ -169,7 +169,7 @@ function getDLsiteProductCodeImageData(productCode) {
     };
 }
 
-function getHtmlFromUrl(url) {
+function getResponseObjectFromUrl(url) {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, false); // false = sync
     xhr.send();
