@@ -9,16 +9,13 @@ var regexDLsite = new RegExp(regexDLsiteString, "gi");
 // found the URL regex online, removed the query strings since those are irrelevant for our purposes
 var regexUrl = /\b((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+)\b/;
 
-/*
-DLsite URLs
- */
+
+// DLsite URLs
 var homepage = "http://www.dlsite.com/";
 var dlsiteProductUrl = homepage + "home/work/=/product_id/";
 var dlsiteGroupUrl = homepage + "maniax/circle/profile/=/maker_id/";
 
-/* CONTEXT MENU: OPEN IN DLSITE
- 1) context menu item to open group or product codes in DLsite
- */
+// CONTEXT MENU item to open group or product codes in DLsite
 // TODO: selection based on matching regex
 // TODO: show number of matches?
 chrome.contextMenus.create({
@@ -27,9 +24,7 @@ chrome.contextMenus.create({
     contexts: ["selection"]
 });
 
-/* CONTEXT MENU: activates preview images to DLsite products on the page
- 1) context menu item to preview group or product codes in DLsite
- */
+// CONTEXT MENU item to preview group or product codes in DLsite
 // TODO: how to toggle script? maybe just don't toggle it and load it when clicked
 // TODO: prevent user from clicking twice
 // Chrome loads the images one at a time, instead of all at once
@@ -43,7 +38,8 @@ chrome.contextMenus.create({
 
 // TODO: how to assign different icons to different context menus? is this even supported
 
-// gate the DLsite preview here?
+// TODO: gate the DLsite preview here? if preview is already running, don't run it again
+// TODO: use the tab id for stopping preview from running multiple times?
 /* LISTENER FOR THE CONTEXT MENUS
  1) handles the behaviour of each context menu item
  */
@@ -85,7 +81,6 @@ function openDLsiteProductPageInBrowser(url) {
 }
 
 function previewDLsite() {
-
     // TODO: prevent preview.js from executing if the user already executed it in the tab
     chrome.tabs.executeScript({
         file: "/preview.js"
@@ -191,6 +186,7 @@ function parseWebPageForDLsiteImage(htmlText) {
     return imageHtml.match(regexUrl);
 }
 
+// utility function
 function isObjectValid(object) {
     return (typeof object !== "undefined" && object !== null)
 }
