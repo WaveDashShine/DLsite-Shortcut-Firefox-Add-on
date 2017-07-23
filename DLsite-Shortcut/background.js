@@ -188,8 +188,7 @@ function parseWebPageForDLsiteImage(htmlText) {
     var parser = new DOMParser();
     var doc = parser.parseFromString(htmlText, "text/html");
     var imageHtml = doc.querySelectorAll('[class="slider_item active"]')[0].innerHTML;
-    var previewImages = imageHtml.match(regexUrl);
-    return previewImages;
+    return imageHtml.match(regexUrl);
 }
 
 function isObjectValid(object) {
