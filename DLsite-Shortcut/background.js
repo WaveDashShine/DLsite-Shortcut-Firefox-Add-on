@@ -1,5 +1,6 @@
 /* DLsite REGEX, covers group code and product code
  */
+// TODO: handle group strings
 var regexDLsiteString = "(R|V|B)((J|E)\\d{6}|(G)\\d{5})"; // Chrome compatibility
 var regexDLsite = new RegExp(regexDLsiteString, "gi");
 
@@ -16,6 +17,7 @@ var dlsiteGroupUrl = homepage + "maniax/circle/profile/=/maker_id/";
  1) context menu item to open group or product codes in DLsite
  */
 // TODO: selection based on matching regex
+// TODO: show number of matches?
 chrome.contextMenus.create({
     id: "shortcut",
     title: chrome.i18n.getMessage("contextMenuOpenDLsite"),
@@ -56,17 +58,6 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
     }
 });
 
-/* PRODUCT CODE PREDICATE FUNCTION FOR CONTEXT MENU
- 1) Returns TRUE if selected text contains dlsite product code
- TODO: look into context menu predicates
- */
-function isProductCode(data){
-    if (typeof data === "undefined" || data.selectionText === null) {
-        return false;
-    }
-    return data.selectionText.match(regexDLsite) !== null;
-}
-
 /* HELPER for opening DLsite
  1) opens sanitized group or product code in DLsite
  */
@@ -78,12 +69,10 @@ function openDLsiteHelper(url){
 
 /* OPEN DLsite
  1) opens sanitized product or group code in DLsite
- 2) if DLsite code is number only, default RJ page
  *) match() returns an array object if match is found, null otherwise
  */
-// TODO: don't open duplicates? var opened = []
 function openDLsite(text){
-    var array = text.toString().match(regexDLsite);
+    var array = removeDuplicatesFromArray(text.toString().match(regexDLsite));
     if(typeof array !== "undefined" && array !== null){
         for (var i = 0; i < array.length; i++) {
             if(array[i].toUpperCase().includes("G")){
@@ -102,6 +91,7 @@ function openDLsite(text){
  */
 function previewDLsite(){
 
+    // TODO: prevent preview.js from executing if the user already executed it in the tab
     chrome.tabs.executeScript({
         file: "/preview.js"
     });
@@ -131,9 +121,10 @@ function sendRequestToTab(requestObject){
 function handleResponseData(response){
     switch (response.action){
         case "previewGetMatches":
-            var matchArray = response.matches;
+            var matchArray = removeDuplicatesFromArray(response.matches);
             if (typeof matchArray !== "undefined" && matchArray !== null){
                 // TODO: send state of toggle as message to preview.js
+                // TODO: toggle hides the images (sets CSS attribute?)
                 console.log("matchArray Background.js = "+matchArray);
                 getImageObjectsFromMatchArray(matchArray);
             }
@@ -148,9 +139,23 @@ function handleResponseData(response){
 
 /*
 
+ */
+function removeDuplicatesFromArray(array){
+    var tempSet = new Set();
+    for (i =0; i < array.length; i++){
+        tempSet.add(array[i]);
+    }
+    return Array.from(tempSet);
+}
+
+/*
+
 */
 function getImageObjectsFromMatchArray(matchArray){
     for (i = 0; i < matchArray.length; i++){
+        //TODO: listener for when tabs are closed
+        // TODO: a global set for DLsite product values -- storage API
+        // TODO: notifications when completed -- API
         var imageObject = getDLsiteProductCodeImageData(matchArray[i].toUpperCase());
         console.log(imageObject.productCode + " " + imageObject.pageUrl + " " + imageObject.source);
         sendRequestToTab({
@@ -183,6 +188,6 @@ function getDLsiteProductCodeImageData(productCode){
         };
     } else {
         // TODO: return 404 error or error image?
-        return "";
+        return null;
     }
 }

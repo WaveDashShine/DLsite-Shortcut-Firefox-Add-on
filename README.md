@@ -44,13 +44,11 @@ http://stackoverflow.com/questions/5904914/javascript-regex-to-replace-text-not-
 -[Case Insensitive] re091090  
 -[Case Insensitive] rj091090  
 -[Not code: should not open] 1234567890  
-##### Should open 4 product links above
 
 **PacoProject (Group Code)**  
 **strange alpaca game*  
 -[Group Code]        RG15719  
 -[Case Insensitive]  rg15719  
-##### Should open 2 group links above
   
 Selecting all should open 6 links total
 
