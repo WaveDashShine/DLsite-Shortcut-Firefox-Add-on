@@ -23,7 +23,7 @@ function sendMatchesResponse(request, sender, sendResponse) {
     console.log(request.regex);
     var matchArray = document.body.textContent.match(new RegExp(request.regex, "gi"));
     console.log("matchArray Preview.js = " + matchArray);
-    if (typeof matchArray !== "undefined" && matchArray !== null) {
+    if (isObjectValid(matchArray)) {
         sendResponse({
             action: request.action,
             matches: matchArray
@@ -33,12 +33,12 @@ function sendMatchesResponse(request, sender, sendResponse) {
 
 // TODO: insert dummy images during loading from dlsite
 function insertImage(request, sender, sendResponse) {
-    if (typeof request.imageObject.productCode !== "undefined" && request.imageObject.productCode !== null &&
-        typeof request.imageObject.source !== "undefined" && request.imageObject.source !== null &&
-        typeof request.imageObject.pageUrl !== "undefined" && request.imageObject.pageUrl !== null) {
+    if (isObjectValid(request.imageObject.productCode) &&
+        isObjectValid(request.imageObject.source) &&
+        isObjectValid(request.imageObject.pageUrl)) {
         walk(document.body, request);
     }
-    // TODO: what response do I send?
+    // TODO: what response do I send? does sending a response cancel the rest of the function
     //sendResponse({action: request.action});
 }
 
@@ -64,7 +64,7 @@ function walk(node, request) {
         case 3: // Text node
             if(node.parentElement.tagName.toLowerCase() !== "script") { //XSS protection
                 var textNodeMatches = node.nodeValue.match(request.imageObject.productCode);
-                if (typeof textNodeMatches !== "undefined" && textNodeMatches !== null) {
+                if (isObjectValid(textNodeMatches)) {
                     insertPreviewImageAtText(node, request);
                 }
             }
@@ -80,7 +80,7 @@ function walk(node, request) {
 // TODO: does not handle group codes
 function insertPreviewImageAtText(textNode, request) {
     var textNodeMatches = textNode.nodeValue.match(request.imageObject.productCode);
-    if (typeof textNodeMatches !== "undefined" && textNodeMatches !== null) {
+    if (isObjectValid(textNodeMatches)) {
         var splitNode = textNode.splitText(textNode.nodeValue.indexOf(textNodeMatches[0]));
         var previewImageLink = createImageLinkFromDLsiteImageData(request.imageObject);
         textNode.parentNode.insertBefore(previewImageLink, splitNode);
@@ -101,7 +101,7 @@ function createImageLinkFromDLsiteImageData(imageObj) {
     return previewLink;
 }
 
-// will not be using import for injected javascript so duplicated function here
+// will not be using import for injected javascript so duplicated utility function here
 function isObjectValid(object) {
     return (typeof object !== "undefined" && object !== null)
 }

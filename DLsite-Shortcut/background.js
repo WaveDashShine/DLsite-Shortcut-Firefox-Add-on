@@ -1,5 +1,6 @@
 // TODO: use functionname = function() {} to make it clearer that functions are objects
 // TODO: minimalize global variables, use wrapper?
+// TODO: store image URLs in add on data
 
 // TODO: handle group strings
 var regexDLsiteString = "(R|V|B)((J|E)\\d{6}|(G)\\d{5})"; // Chrome compatibility
