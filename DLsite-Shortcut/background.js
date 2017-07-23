@@ -47,7 +47,7 @@ chrome.contextMenus.create({
  1) handles the behaviour of each context menu item
  */
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
-    switch (info.menuItemId){
+    switch (info.menuItemId) {
         case "shortcut":
             console.log(info.selectionText);
             openDLsite(info.selectionText);
@@ -64,26 +64,26 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
  1) opens sanitized product or group code in DLsite
  *) match() returns an array object if match is found, null otherwise
  */
-function openDLsite(text){
-    var array = removeDuplicatesFromArray(text.toString().match(regexDLsite));
-    if(typeof array !== "undefined" && array !== null){
-        for (var i = 0; i < array.length; i++) {
-            if(array[i].toUpperCase().includes("G")){
-                openDLsiteProductPageInBrowser(dlsiteGroupUrl + array[i].toUpperCase());
+function openDLsite(text) {
+    var productCodeMatchArray = removeDuplicatesFromArray(text.toString().match(regexDLsite));
+    if (isObjectValid(productCodeMatchArray)) {
+        for (var i = 0; i < productCodeMatchArray.length; i++) {
+            if (productCodeMatchArray[i].toUpperCase().includes("G")) {
+                openDLsiteProductPageInBrowser(dlsiteGroupUrl + productCodeMatchArray[i].toUpperCase());
             } else {
-                openDLsiteProductPageInBrowser(dlsiteProductUrl + array[i].toUpperCase());
+                openDLsiteProductPageInBrowser(dlsiteProductUrl + productCodeMatchArray[i].toUpperCase());
             }
         }
     }
 }
 
-function openDLsiteProductPageInBrowser(url){
+function openDLsiteProductPageInBrowser(url) {
     var group = chrome.tabs.create({
         url: url
     });
 }
 
-function previewDLsite(){
+function previewDLsite() {
 
     // TODO: prevent preview.js from executing if the user already executed it in the tab
     chrome.tabs.executeScript({
@@ -96,21 +96,21 @@ function previewDLsite(){
     });
 }
 
-function sendRequestToTab(requestObject){
-    chrome.tabs.query({active: true, currentWindow: true},function(tabs){
-        chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response){
-            if (typeof response !== "undefined" && response !== null){
+function sendRequestToTab(requestObject) {
+    chrome.tabs.query({active: true, currentWindow: true},function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {
+            if (isObjectValid(response)) {
                 handleResponseData(response);
             }
         });
     });
 }
 
-function handleResponseData(response){
-    switch (response.action){
+function handleResponseData(response) {
+    switch (response.action) {
         case "previewGetMatches":
             var matchArray = removeDuplicatesFromArray(response.matches);
-            if (typeof matchArray !== "undefined" && matchArray !== null){
+            if (isObjectValid(matchArray)) {
                 // TODO: send state of toggle as message to preview.js
                 // TODO: toggle hides the images (sets CSS attribute?)
                 console.log("matchArray Background.js = "+matchArray);
@@ -125,9 +125,9 @@ function handleResponseData(response){
     }
 }
 
-function removeDuplicatesFromArray(array){
+function removeDuplicatesFromArray(array) {
     var tempSet = new Set();
-    for (var i = 0; i < array.length; i++){
+    for (var i = 0; i < array.length; i++) {
         tempSet.add(array[i]);
     }
     return Array.from(tempSet);
@@ -154,28 +154,43 @@ function getImageObjectsFromMatchArray(matchArray) {
  *) DOES NOT WORK ON SOME SITES DUE TO CROSS ORIGIN POLICY
  */
 function getDLsiteProductCodeImageData(productCode) {
-    var xhr = new XMLHttpRequest();
-    var dlsiteProductPage = dlsiteProductUrl + productCode;
-    xhr.open("GET", dlsiteProductPage, false); // false = sync
-    xhr.send();
-    if (xhr.status == 200) {
-        var htmlText = xhr.responseText;
-        var previewImages = parseWebPageForDLsiteImage(htmlText);
-        return {
-            productCode: productCode,
-            source: previewImages[0],
-            pageUrl :xhr.responseURL
-        };
-    } else {
-        // TODO: return 404 error or error image?
+    var dlsiteProductPageUrl = dlsiteProductUrl + productCode;
+    var responseObject = getHtmlFromUrl(dlsiteProductPageUrl);
+    if (!isObjectValid(responseObject))
         return null;
-    }
+    var htmlText = responseObject.responseHtmlText;
+    var resolvedUrl = responseObject.responseResolvedUrl;
+    var previewImages = parseWebPageForDLsiteImage(htmlText);
+    return {
+        productCode: productCode,
+        source: previewImages[0],
+        pageUrl: resolvedUrl
+    };
 }
 
-function parseWebPageForDLsiteImage(htmlText){
+function getHtmlFromUrl(url) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, false); // false = sync
+    xhr.send();
+    // TODO: return 404 error or error image?
+    var responseObject = null;
+    if (xhr.status == 200) {
+        responseObject = {
+            responseHtmlText: xhr.responseText,
+            responseResolvedUrl: xhr.responseURL
+        }
+    }
+    return responseObject;
+}
+
+function parseWebPageForDLsiteImage(htmlText) {
     var parser = new DOMParser();
     var doc = parser.parseFromString(htmlText, "text/html");
     var imageHtml = doc.querySelectorAll('[class="slider_item active"]')[0].innerHTML;
     var previewImages = imageHtml.match(regexUrl);
     return previewImages;
+}
+
+function isObjectValid(object) {
+    return (typeof object !== "undefined" && object !== null)
 }
