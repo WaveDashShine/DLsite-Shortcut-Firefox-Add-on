@@ -3,14 +3,11 @@
 // requires the onMessage Listener
 chrome.runtime.onMessage.addListener(handleRequestData);
 
-/*
-
- */
 function handleRequestData(request, sender, sendResponse){
     switch (request.action){
         case "previewGetMatches":
             // TODO: handle match arrays
-            sendMatches(request, sender, sendResponse);
+            sendMatchesResponse(request, sender, sendResponse);
             break;
         case "previewInsertImage":
             insertImage(request, sender, sendResponse);
@@ -22,10 +19,7 @@ function handleRequestData(request, sender, sendResponse){
     }
 }
 
-/*
-
- */
-function sendMatches(request, sender, sendResponse){
+function sendMatchesResponse(request, sender, sendResponse){
     console.log(request.regex);
     var matchArray = document.body.textContent.match(new RegExp(request.regex, "gi"));
     console.log("matchArray Preview.js = " + matchArray);
@@ -37,32 +31,19 @@ function sendMatches(request, sender, sendResponse){
     }
 }
 
-/*/
-DEPRECATED
- */
-function sendDocument(request, sender, sendResponse){
-    // stub
-    sendResponse({
-        action: request.action,
-        documentTextContent: document.body.textContent
-    });
-}
-
-/*
-
- */
-// TODO: insert dummy images when its loading
+// TODO: insert dummy images during loading from dlsite
 function insertImage(request, sender, sendResponse) {
     if (typeof request.imageObject.productCode !== "undefined" && request.imageObject.productCode !== null &&
         typeof request.imageObject.source !== "undefined" && request.imageObject.source !== null &&
         typeof request.imageObject.pageUrl !== "undefined" && request.imageObject.pageUrl !== null){
         walk(document.body, request);
     }
-
+    // TODO: what response do I send?
     //sendResponse({action: request.action});
 }
 
-/* WALKS THROUGH DOCUMENT AND HANDLES ONLY VISIBLE TEXT ON PAGE
+/*
+WALKS THROUGH DOCUMENT AND HANDLES ONLY VISIBLE TEXT ON PAGE
 Following code referenced from stackoverflow.com
 /questions/5904914/javascript-regex-to-replace-text-not-in-html-attributes/5904945#5904945
  */
@@ -81,7 +62,7 @@ function walk(node, request) {
             }
             break;
         case 3: // Text node
-            if(node.parentElement.tagName.toLowerCase() != "script") { //XSS protection
+            if(node.parentElement.tagName.toLowerCase() !== "script") { //XSS protection
                 var textNodeMatches = node.nodeValue.match(request.imageObject.productCode);
                 if (typeof textNodeMatches !== "undefined" && textNodeMatches !== null){
                     insertPreviewImageAtText(node, request);

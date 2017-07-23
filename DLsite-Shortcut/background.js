@@ -1,5 +1,6 @@
-/* DLsite REGEX, covers group code and product code
- */
+// TODO: use functionname = function() {} to make it clearer that functions are objects
+// TODO: minimalize global variables, use wrapper?
+
 // TODO: handle group strings
 var regexDLsiteString = "(R|V|B)((J|E)\\d{6}|(G)\\d{5})"; // Chrome compatibility
 var regexDLsite = new RegExp(regexDLsiteString, "gi");
@@ -7,7 +8,8 @@ var regexDLsite = new RegExp(regexDLsiteString, "gi");
 // found the URL regex online, removed the query strings since those are irrelevant for our purposes
 var regexUrl = /\b((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+)\b/;
 
-/* DLsite URLs
+/*
+DLsite URLs
  */
 var homepage = "http://www.dlsite.com/";
 var dlsiteProductUrl = homepage + "home/work/=/product_id/";
@@ -38,7 +40,7 @@ chrome.contextMenus.create({
     contexts: ["all"]
 });
 
-// TODO: how to assign different icons to different context menus?
+// TODO: how to assign different icons to different context menus? is this even supported
 
 // gate the DLsite preview here?
 /* LISTENER FOR THE CONTEXT MENUS
@@ -58,15 +60,6 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
     }
 });
 
-/* HELPER for opening DLsite
- 1) opens sanitized group or product code in DLsite
- */
-function openDLsiteHelper(url){
-    var group = chrome.tabs.create({
-        url: url
-    });
-}
-
 /* OPEN DLsite
  1) opens sanitized product or group code in DLsite
  *) match() returns an array object if match is found, null otherwise
@@ -76,19 +69,20 @@ function openDLsite(text){
     if(typeof array !== "undefined" && array !== null){
         for (var i = 0; i < array.length; i++) {
             if(array[i].toUpperCase().includes("G")){
-                openDLsiteHelper(dlsiteGroupUrl + array[i].toUpperCase());
+                openDLsiteProductPageInBrowser(dlsiteGroupUrl + array[i].toUpperCase());
             } else {
-                openDLsiteHelper(dlsiteProductUrl + array[i].toUpperCase());
+                openDLsiteProductPageInBrowser(dlsiteProductUrl + array[i].toUpperCase());
             }
         }
     }
 }
 
-/* TODO: ACTIVATES PREVIEWS FOR DLSITE PRODUCT AND GROUP CODES
-1)
-2)
-3)
- */
+function openDLsiteProductPageInBrowser(url){
+    var group = chrome.tabs.create({
+        url: url
+    });
+}
+
 function previewDLsite(){
 
     // TODO: prevent preview.js from executing if the user already executed it in the tab
@@ -102,9 +96,6 @@ function previewDLsite(){
     });
 }
 
-/*
-
- */
 function sendRequestToTab(requestObject){
     chrome.tabs.query({active: true, currentWindow: true},function(tabs){
         chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response){
@@ -115,9 +106,6 @@ function sendRequestToTab(requestObject){
     });
 }
 
-/*
-
- */
 function handleResponseData(response){
     switch (response.action){
         case "previewGetMatches":
@@ -137,22 +125,16 @@ function handleResponseData(response){
     }
 }
 
-/*
-
- */
 function removeDuplicatesFromArray(array){
     var tempSet = new Set();
-    for (i =0; i < array.length; i++){
+    for (var i = 0; i < array.length; i++){
         tempSet.add(array[i]);
     }
     return Array.from(tempSet);
 }
 
-/*
-
-*/
-function getImageObjectsFromMatchArray(matchArray){
-    for (i = 0; i < matchArray.length; i++){
+function getImageObjectsFromMatchArray(matchArray) {
+    for (var i = 0; i < matchArray.length; i++) {
         //TODO: listener for when tabs are closed
         // TODO: a global set for DLsite product values -- storage API
         // TODO: notifications when completed -- API
@@ -171,23 +153,29 @@ function getImageObjectsFromMatchArray(matchArray){
  3) returns the src to the product image
  *) DOES NOT WORK ON SOME SITES DUE TO CROSS ORIGIN POLICY
  */
-function getDLsiteProductCodeImageData(productCode){
+function getDLsiteProductCodeImageData(productCode) {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", dlsiteProductUrl + productCode, false); // false = sync
+    var dlsiteProductPage = dlsiteProductUrl + productCode;
+    xhr.open("GET", dlsiteProductPage, false); // false = sync
     xhr.send();
-    if (xhr.status == 200){
-        var xhrText = xhr.responseText;
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(xhrText, "text/html");
-        var imageHtml = doc.querySelectorAll('[class="slider_item active"]')[0].innerHTML;
-        var imageSrc = imageHtml.match(regexUrl);
+    if (xhr.status == 200) {
+        var htmlText = xhr.responseText;
+        var previewImages = parseWebPageForDLsiteImage(htmlText);
         return {
             productCode: productCode,
-            source: imageSrc[0],
+            source: previewImages[0],
             pageUrl :xhr.responseURL
         };
     } else {
         // TODO: return 404 error or error image?
         return null;
     }
+}
+
+function parseWebPageForDLsiteImage(htmlText){
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(htmlText, "text/html");
+    var imageHtml = doc.querySelectorAll('[class="slider_item active"]')[0].innerHTML;
+    var previewImages = imageHtml.match(regexUrl);
+    return previewImages;
 }
