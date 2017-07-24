@@ -62,7 +62,8 @@ function walk(node, request) {
             }
             break;
         case 3: // Text node
-            if(node.parentElement.tagName.toLowerCase() !== "script") { //XSS protection
+            if (node.parentElement.tagName.toLowerCase() !== "script" &&//XSS protection
+                node.parentElement.tagName.toLowerCase() !== "a") {
                 var textNodeMatches = node.nodeValue.match(request.imageObject.productCode);
                 if (isObjectValid(textNodeMatches)) {
                     insertPreviewImageAtText(node, request);
