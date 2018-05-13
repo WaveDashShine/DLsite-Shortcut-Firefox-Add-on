@@ -168,7 +168,7 @@ function getResponseObjectFromUrl(url) {
     xhr.send();
     // TODO: return 404 error or error image?
     var responseObject = null;
-    if (xhr.status === 200) {
+    if (xhr.status == 200) {
         responseObject = {
             responseHtmlText: xhr.responseText,
             responseResolvedUrl: xhr.responseURL
