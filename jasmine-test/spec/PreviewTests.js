@@ -1,10 +1,10 @@
-describe('test stub', function () {
+describe("preview tests stub", function () {
     it("should always pass", function () {
         expect(true).toBe(true);
-    })
+    });
 });
 
-describe('invalid objects are invalid', function () {
+describe("invalid objects are invalid", function () {
     it("undefined is invalid", function () {
         expect(isObjectValid()).toBe(false);
     });
@@ -14,7 +14,7 @@ describe('invalid objects are invalid', function () {
     });
 });
 
-describe('Image preview', function () {
+describe("Image preview", function () {
     it("image preview contains data from image object", function () {
         var pageUrl = "fakeurl";
         var imageLink = "fakeimage";
@@ -32,5 +32,5 @@ describe('Image preview', function () {
         expect(previewLink.childElementCount).toBe(1);
         expect(previewImage.src).toContain(imageLink);
         expect(previewImage.nodeName).toBe("IMG");
-    })
+    });
 });
