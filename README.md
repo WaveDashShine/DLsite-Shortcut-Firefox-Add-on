@@ -1,4 +1,4 @@
-#DLsite Shortcut WebExtension
+# DLsite Shortcut WebExtension
 ###### Add-ons for Firefox: Authored to Hotmail account
 ###### Chrome Webstore: Authored to Gmail account
 
