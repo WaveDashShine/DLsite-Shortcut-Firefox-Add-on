@@ -4,26 +4,32 @@ describe("background tests stub", function () {
     });
 });
 
-describe("invalid objects are invalid", function () {
-    it("undefined is invalid", function () {
-        expect(isObjectValid()).toBe(false);
-    });
-
-    it("null is invalid", function () {
-        expect(isObjectValid(null)).toBe(false);
+describe("array function", function () {
+    var productCodeArray = ["RE091090", "RE091090", "RG15719", "RE091090", "RG15719"];
+    var arrayNoDuplicates = removeDuplicatesFromArray(productCodeArray);
+    it("duplicates should be removed from array", function () {
+        expect(arrayNoDuplicates.length).toBe(2);
+        expect(arrayNoDuplicates.includes("RE091090")).toBe(true);
+        expect(arrayNoDuplicates.includes("RG15719")).toBe(true);
     });
 });
 
-describe("get image data for RE091090", function () {
-
+describe("get request for image data from product code", function () {
     var productCode = "RE091090";
     var responseHTML = "<li class=\"slider_item active\" style=\"width: 759px;\"><img itemprop=\"image\" src=\"//img.dlsite.jp/modpub/images2/work/doujin/RJ092000/RJ091090_img_main.jpg\"></li>";
-    var expectedPageUrl = dlsiteProductUrl + productCode;
+    var generatedPageUrl = dlsiteProductUrl + productCode;
     var expectedImageUrl = "img.dlsite.jp/modpub/images2/work/doujin/RJ092000/RJ091090_img_main.jpg";
 
     // need ajax to mock xml http requests
     beforeEach(function() {
         jasmine.Ajax.install();
+
+        jasmine.Ajax.stubRequest(generatedPageUrl).andReturn({
+            "status": 200,
+            "contentType": "text/html",
+            "responseText": responseHTML,
+            "responseURL": "http://www.dlsite.com/eng/work/=/product_id/RE091090.html"
+        });
     });
 
     // uninstall in case other specs need to make requests
@@ -31,14 +37,35 @@ describe("get image data for RE091090", function () {
         jasmine.Ajax.uninstall();
     });
 
-    it("get data from DLsite", function () {
-        jasmine.Ajax.stubRequest(expectedPageUrl).andReturn({
-            "status": 200,
-            "contentType": "text/html",
-            "responseText": responseHTML,
-            "responseURL": "http://www.dlsite.com/eng/work/=/product_id/RE091090.html"
-        });
+    it("image objects are parsed from array", function () {
+        var productCodeArray = [productCode];
+        var imageData = getDLsiteProductCodeImageData(productCode);
+        spyOn(window, "getImageObjectsFromMatchArray").and.callThrough();
+        spyOn(window, "sendRequestToActiveTab");
 
+        getImageObjectsFromMatchArray(productCodeArray);
+        expect(window.getImageObjectsFromMatchArray).toHaveBeenCalledWith(productCodeArray);
+
+        var activeTabParamters = {
+            action: "previewInsertImage",
+            imageObject: imageData
+        };
+        expect(window.sendRequestToActiveTab).toHaveBeenCalledWith(activeTabParamters);
+    });
+
+    it("html can be parsed for image url", function () {
+        var imageUrl = parseWebPageForDLsiteImage(responseHTML);
+        expect(imageUrl[0]).toBe(expectedImageUrl);
+    });
+
+    it("response object obtained from url", function () {
+        var responseObject = getResponseObjectFromUrl(generatedPageUrl);
+        expect(responseObject.responseHtmlText).toBe(responseHTML);
+        expect(responseObject.responseResolvedUrl).toContain(productCode);
+        expect(responseObject.responseResolvedUrl).toContain("dlsite");
+    });
+
+    it("get data from DLsite with product code", function () {
         var imageData = getDLsiteProductCodeImageData(productCode);
 
         expect(jasmine.Ajax.requests.mostRecent().url).toContain(productCode);
@@ -48,6 +75,16 @@ describe("get image data for RE091090", function () {
         expect(imageData.pageUrl).toContain(productCode);
         expect(imageData.pageUrl).toContain("dlsite");
         expect(imageData.source).toBe(expectedImageUrl);
+    });
+});
+
+describe("invalid objects are invalid", function () {
+    it("undefined is invalid", function () {
+        expect(isObjectValid()).toBe(false);
+    });
+
+    it("null is invalid", function () {
+        expect(isObjectValid(null)).toBe(false);
     });
 });
 
