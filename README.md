@@ -14,6 +14,12 @@ Switch from the Japanese version to the English version of the site, provided th
 
 - (Pending for WebExtension version) Group codes default to the Japanese maniax website.  
 *************************************************************
+###Tests:
+Jasmine 3.1.0: https://github.com/jasmine/jasmine/releases  
+Sinon-Chrome 2.3.2: https://github.com/acvetkov/sinon-chrome/releases (grab the largest file)  
+Jasmine-Ajax 3.3.1: https://github.com/jasmine/jasmine-ajax  
+
+To run, open SpecRunner.html in the browser of your choice
 
 ###HOW TO INSTALL:  
 https://addons.mozilla.org/en-US/firefox/addon/dlsite-shortcut/ (deprecated Add-on SDK)   
