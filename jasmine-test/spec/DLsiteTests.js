@@ -1,4 +1,4 @@
-describe("background tests stub", function () {
+describe("tests stub", function () {
     it("should always pass", function () {
         expect(true).toBe(true);
     });
@@ -88,3 +88,34 @@ describe("invalid objects are invalid", function () {
     });
 });
 
+describe("Image preview", function () {
+    it("image preview contains data from image object", function () {
+        var pageUrl = "fakeurl";
+        var imageLink = "fakeimage";
+        var imageData = {
+            productCode: "RE091090",
+            source: imageLink,
+            pageUrl: pageUrl
+        };
+        var previewLink = createImageLinkFromDLsiteImageData(imageData);
+        var previewImage = previewLink.childNodes[0];
+
+        expect(previewLink.nodeName).toBe("A");
+        expect(previewLink.rel).toBe("noreferrer");
+        expect(previewLink.href).toContain(pageUrl);
+        expect(previewLink.childElementCount).toBe(1);
+        expect(previewImage.src).toContain(imageLink);
+        expect(previewImage.nodeName).toBe("IMG");
+    });
+});
+
+// TODO: insert image -> walk
+// create dummy request object and have a field with imageObject and associated data
+
+// TODO: insert preview images
+
+// TODO: sendRequestToActiveTab -> may need ajax
+
+// TODO: open DLsite page function
+
+// TODO: send matches response
