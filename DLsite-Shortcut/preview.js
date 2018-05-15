@@ -98,6 +98,7 @@ function createImageLinkFromDLsiteImageData(imageObj) {
     var previewLink = document.createElement("a");
     previewImage.setAttribute("src", "https://" + imageObj.source);
     previewLink.setAttribute("href", imageObj.pageUrl);
+    previewLink.setAttribute("rel", "noreferrer");
     previewLink.appendChild(previewImage);
     return previewLink;
 }

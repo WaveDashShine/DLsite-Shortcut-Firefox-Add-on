@@ -36,8 +36,6 @@ chrome.contextMenus.create({
     contexts: ["all"]
 });
 
-// TODO: how to assign different icons to different context menus? is this even supported
-
 // TODO: gate the DLsite preview here? if preview is already running, don't run it again
 // TODO: use the tab id for stopping preview from running multiple times?
 /* LISTENER FOR THE CONTEXT MENUS
