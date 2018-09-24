@@ -6,12 +6,10 @@ chrome.runtime.onMessage.addListener(handleRequestData);
 function handleRequestData(request, sender, sendResponse) {
     switch (request.action) {
         case "previewGetMatches":
-            // TODO: handle match arrays
             sendMatchesResponse(request, sender, sendResponse);
             break;
         case "previewInsertImage":
             insertImage(request, sender, sendResponse);
-            // TODO: remove listener?
             //chrome.runtime.onMessage.removeListener(handleRequestData);
             break;
         default:
@@ -31,14 +29,12 @@ function sendMatchesResponse(request, sender, sendResponse) {
     }
 }
 
-// TODO: insert dummy images during loading from dlsite
 function insertImage(request, sender, sendResponse) {
     if (isObjectValid(request.imageObject.productCode) &&
         isObjectValid(request.imageObject.source) &&
         isObjectValid(request.imageObject.pageUrl)) {
         walk(document.body, request);
     }
-    // TODO: what response do I send? does sending a response cancel the rest of the function
     //sendResponse({action: request.action});
 }
 
@@ -77,8 +73,6 @@ function walk(node, request) {
 1) Inserts image before the text appearance
 2) Image links to DLsite Page
  */
-// TODO: does not handle multiple matches within a single text node
-// TODO: does not handle group codes
 function insertPreviewImageAtText(textNode, request) {
     var textNodeMatches = textNode.nodeValue.match(request.imageObject.productCode);
     if (isObjectValid(textNodeMatches)) {
@@ -92,7 +86,6 @@ function insertPreviewImageAtText(textNode, request) {
 1) requires image data with IMG "source" and "pageURL" LINK
 2) returns the HTML image element with src attribute
  */
-// TODO: if no image available use a 404 image from somewhere... load image from addon path?
 function createImageLinkFromDLsiteImageData(imageObj) {
     var previewImage = document.createElement("img");
     var previewLink = document.createElement("a");

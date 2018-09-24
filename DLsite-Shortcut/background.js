@@ -1,8 +1,3 @@
-// TODO: use functionname = function() {} to make it clearer that functions are objects
-// TODO: minimalize global variables, use wrapper?
-// TODO: store image URLs in add on data
-
-// TODO: handle group strings
 var regexDLsiteString = "(R|V|B)((J|E)\\d{6}|(G)\\d{5})"; // Chrome compatibility
 var regexDLsite = new RegExp(regexDLsiteString, "gi");
 
@@ -16,8 +11,6 @@ var dlsiteProductUrl = homepage + "home/work/=/product_id/";
 var dlsiteGroupUrl = homepage + "maniax/circle/profile/=/maker_id/";
 
 // CONTEXT MENU item to open group or product codes in DLsite
-// TODO: selection based on matching regex
-// TODO: show number of matches?
 chrome.contextMenus.create({
     id: "shortcut",
     title: chrome.i18n.getMessage("contextMenuOpenDLsite"),
@@ -25,8 +18,6 @@ chrome.contextMenus.create({
 });
 
 // CONTEXT MENU item to preview group or product codes in DLsite
-// TODO: how to toggle script? maybe just don't toggle it and load it when clicked
-// TODO: prevent user from clicking twice
 // Chrome loads the images one at a time, instead of all at once
 chrome.contextMenus.create({
     id: "preview",
@@ -36,8 +27,6 @@ chrome.contextMenus.create({
     contexts: ["all"]
 });
 
-// TODO: gate the DLsite preview here? if preview is already running, don't run it again
-// TODO: use the tab id for stopping preview from running multiple times?
 /* LISTENER FOR THE CONTEXT MENUS
  1) handles the behaviour of each context menu item
  */
@@ -79,7 +68,6 @@ function openDLsiteProductPageInBrowser(url) {
 }
 
 function previewDLsite() {
-    // TODO: prevent preview.js from executing if the user already executed it in the tab
     chrome.tabs.executeScript({
         file: "/preview.js"
     });
@@ -105,8 +93,6 @@ function handleResponseData(response) {
         case "previewGetMatches":
             var matchArray = removeDuplicatesFromArray(response.matches);
             if (isObjectValid(matchArray)) {
-                // TODO: send state of toggle as message to preview.js
-                // TODO: toggle hides the images (sets CSS attribute?)
                 console.log("matchArray Background.js = "+matchArray);
                 getImageObjectsFromMatchArray(matchArray);
             }
@@ -129,9 +115,6 @@ function removeDuplicatesFromArray(array) {
 
 function getImageObjectsFromMatchArray(matchArray) {
     for (var i = 0; i < matchArray.length; i++) {
-        //TODO: listener for when tabs are closed
-        // TODO: a global set for DLsite product values -- storage API
-        // TODO: notifications when completed -- API
         var imageObject = getDLsiteProductCodeImageData(matchArray[i].toUpperCase());
         console.log(imageObject.productCode + " " + imageObject.pageUrl + " " + imageObject.source);
         sendRequestToActiveTab({
@@ -166,7 +149,6 @@ function getResponseObjectFromUrl(url) {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, false); // false = sync
     xhr.send();
-    // TODO: return 404 error or error image?
     var responseObject = null;
     if (xhr.status == 200) {
         responseObject = {
